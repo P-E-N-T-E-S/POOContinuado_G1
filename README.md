@@ -6,20 +6,9 @@
   <li>
     <a href="https://github.com/Thomazrlima">Thomaz Lima</a> - trl@cesar.school 📩
   </li>
-  <li>
-    <a href="https://github.com/hsspedro">Pedro Henrique Silva</a> - phss@cesar.school 📩
-  </li>
-  <li>
-    <a href="https://github.com/Sofia-Saraiva">Sofia Saraiva</a> - spscl@cesar.school 📩
-  </li>
-  <li>
-    <a href="https://github.com/Luiz-Edu0202">Luiz Eduardo Bryner</a> - elab@cesar.school 📩
   </li>
   <li>
     <a href="https://github.com/Nerebo">André Goes</a> - algcf@cesar.school 📩
-  </li>
-  <li>
-    <a href="https://github.com/evaldocunhaf">Evaldo Galdino</a> - egcf@cesar.school 📩
   </li>
 </ul>
 
