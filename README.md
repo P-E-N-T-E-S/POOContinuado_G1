@@ -1,4 +1,37 @@
-# ☕ POOContinuado_G1
+<p align="center">
+  <img
+    width="250"
+    display="inline-block"
+    src="https://seeklogo.com/images/J/java-logo-41D4155FC3-seeklogo.com.png"
+  />
+</p>
+
+<p align="center">
+  <img
+    src="https://img.shields.io/badge/Status-Em%20desenvolvimento-green?style=flat-square"
+    alt="Status"
+  />
+</p>
+
+<p align="center">
+  <img
+    src="https://img.shields.io/github/repo-size/P-E-N-T-E-S/POOContinuado_G1?style=flat"
+    alt="Repository Size"
+  />
+  <img
+    src="https://img.shields.io/github/languages/count/P-E-N-T-E-S/POOContinuado_G1?style=flat&logo=python"
+    alt="Language Count"
+  />
+  <img
+    src="https://img.shields.io/github/commit-activity/t/P-E-N-T-E-S/POOContinuado_G1?style=flat&logo=github"
+    alt="Commit Activity"
+  />
+  <a href="LICENSE.md"
+    ><img
+      src="https://img.shields.io/github/license/P-E-N-T-E-S/POOContinuado_G1"
+      alt="License"
+  /></a>
+</p>
 
 ## 📄 Descrição
 
@@ -22,35 +55,12 @@ Este projeto é uma continuação do curso de Programação Orientada a Objetos 
 2. Instale as dependências necessárias (se aplicável).
 3. Execute a aplicação seguindo as instruções específicas do projeto.
 
-## 👩‍💻 Membros
+## 👨‍👩‍👧‍👦 Contribuintes
+  
+<a href="https://github.com/P-E-N-T-E-S/POOContinuado_G1/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=P-E-N-T-E-S/POOContinuado_G1" />
+</a>
 
-<ul>
-  <li>
-    <a href="https://github.com/Thomazrlima">Thomaz Lima</a> - trl@cesar.school 📩
-  </li>
-  </li>
-  <li>
-    <a href="https://github.com/evaldocunhaf">Evaldo Galdino</a> - egcf@cesar.school 📩
-  </li>
-</ul>
+## ⚖️ License
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Thomazrlima">
-        <img src="https://avatars3.githubusercontent.com/Thomazrlima" width="100px;" alt="Foto de Thomaz"/><br>
-        <sub>
-          <b>Thomaz Lima</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/evaldocunhaf">
-        <img src="https://avatars3.githubusercontent.com/evaldocunhaf" width="100px;" alt="Foto de Evaldo"/><br>
-        <sub>
-          <b>Evaldo Galdino</b>
-        </sub>
-      </a>
-    </td>
-  </tr>
-</table>
+[MIT](https://github.com/P-E-N-T-E-S/POOContinuado_G1/blob/master/LICENSE.md)
