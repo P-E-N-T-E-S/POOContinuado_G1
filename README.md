@@ -37,6 +37,7 @@
 
 Este projeto é uma continuação do curso de Programação Orientada a Objetos (POO). Ele foi desenvolvido como parte do currículo do curso de Engenharia de Software na Universidade XYZ. O objetivo principal deste projeto é aplicar os conceitos aprendidos durante o curso de POO em um cenário prático, desenvolvendo uma aplicação ou sistema de software.
 
+
 ## 🔌 Tecnologias Utilizadas
 
 - Linguagem de Programação: Java
