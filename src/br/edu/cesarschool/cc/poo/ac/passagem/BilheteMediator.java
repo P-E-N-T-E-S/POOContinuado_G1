@@ -25,6 +25,45 @@ public class BilheteMediator {
         return bilheteVipDAO.buscar(numeroVip);
     }
 
+    public ResultadoGeracaoBilhete gerarBilhete(String cpf, String ciaAerea, int numeroVoo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
+        String validacao = validar(cpf, ciaAerea, numeroVoo, preco, pagamentoEmPontos, dataHora);
+        if (validacao != null) {
+            return new ResultadoGeracaoBilhete(null, null, validacao);
+        }
+        Voo voo = new Voo(null, null, ciaAerea, numeroVoo);
+        String idVoo = voo.obterIdVoo();
+        Voo vooBuscado = vooMediator.buscar(idVoo);
+
+        if (vooBuscado == null) {
+            return new ResultadoGeracaoBilhete(null, null, "Voo nao encontrado");
+        }
+
+        Cliente cliente = clienteMediator.buscar(cpf);
+
+        if (cliente == null) {
+            return new ResultadoGeracaoBilhete(null, null, "Cliente nao encontrado");
+        }
+
+        double valorPontosNecessarios = pagamentoEmPontos * 20;
+
+        if (cliente.getSaldoPontos() < valorPontosNecessarios) {
+            return new ResultadoGeracaoBilhete(null, null, "Pontos insuficientes");
+        }
+
+        Bilhete bilhete = new Bilhete(cliente, vooBuscado, preco, pagamentoEmPontos, dataHora);
+        cliente.debitarPontos((int) valorPontosNecessarios);
+
+        if (!bilheteDAO.incluir(bilhete)) {
+            return new ResultadoGeracaoBilhete(null, null, "Bilhete ja existente");
+        }
+
+        if (clienteMediator.alterar(cliente) != null) {
+            return new ResultadoGeracaoBilhete(null, null, "Erro ao atualizar cliente");
+        }
+
+        return new ResultadoGeracaoBilhete(bilhete, null, null);
+    }
+
     public String validar(String cpf, String ciaAerea, int numeroVoo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
         VooMediator vooMediator = VooMediator.getInstance();
         ClienteMediator clienteMediator = ClienteMediator.getInstance();
