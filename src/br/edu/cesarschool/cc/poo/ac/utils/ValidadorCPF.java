@@ -32,7 +32,6 @@ public class ValidadorCPF {
             digito2 = 0;
         }
 
-        // Verificar se os dígitos verificadores calculados são iguais aos fornecidos
         return Character.getNumericValue(cpf.charAt(9)) == digito1 && Character.getNumericValue(cpf.charAt(10)) == digito2;
     }
 }
