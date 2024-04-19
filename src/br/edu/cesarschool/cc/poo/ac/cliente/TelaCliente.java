@@ -55,14 +55,19 @@ public class TelaCliente {
         Cliente cliente = new Cliente(cpf, nome, saldo);
         String retorno = clienteMediator.incluir(cliente);
         if (retorno == null) {
-            System.out.println("Produto incluído com sucesso!");
+            System.out.println("Cliente incluído com sucesso!");
         } else {
             System.out.println(retorno);
         }
     }
 
     private void processaAlteracao() {
-        Cliente cliente = processaBusca();
+        String cpf = processaBusca().getCpf();
+        System.out.println("Insira o nome do cliente: ");
+        String nome = lerString();
+        System.out.println("Insira o saldo do cliente");
+        double saldo = ENTRADA.nextDouble();
+        Cliente cliente = new Cliente(cpf, nome, saldo);
         String retorno = clienteMediator.alterar(cliente);
         if (retorno == null) {
             System.out.println("Cliente alterado com sucesso!");
@@ -72,8 +77,8 @@ public class TelaCliente {
     }
 
     private Cliente processaBusca() {
-        System.out.print("Digite o cpf do cliente");
-        String cpf = ENTRADA.nextLine();
+        System.out.print("Digite o cpf do cliente: ");
+        String cpf = lerString();
         Cliente cliente = clienteMediator.buscar(cpf);
         if (cliente == null) {
             System.out.println("Cliente nao encontrado");
