@@ -15,6 +15,7 @@ import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 
 public class TestesAc04 extends TesteGeral {
     private static final String BILHETE_JA_EXISTENTE = "Bilhete ja existente";
+    private static final String BILHETE_VIP_JA_EXISTENTE = "Bilhete vip ja existente";
     private static final String PONTOS_INSUFICIENTES = "Pontos insuficientes";
     private static final String CLIENTE_NAO_ENCONTRADO = "Cliente nao encontrado";
     private static final String VOO_INEXISTENTE = "Voo nao encontrado";
@@ -440,7 +441,7 @@ public class TestesAc04 extends TesteGeral {
         ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
                 preco, pagamentoEmPontos, dataHora1, bonus);
         assertResErro(res, BILHETE_JA_EXISTENTE);
-        assertResErro(res1, BILHETE_JA_EXISTENTE);
+        assertResErro(res1, BILHETE_VIP_JA_EXISTENTE);
         Assertions.assertEquals(1, obterQtdArquivosDir(DIR_CLIENTE));
         Assertions.assertEquals(1, obterQtdArquivosDir(DIR_VOO));
         Assertions.assertEquals(1, obterQtdArquivosDir(DIR_BILHETE));
