@@ -4,8 +4,9 @@ public class ValidadorCPF {
     private ValidadorCPF() {
     }
     public static boolean isCpfValido(String cpf) {
-        cpf = cpf.replaceAll("[^0-9]", "");
-
+        if(cpf == null) {
+            return false;
+        }
         if (cpf.length() != 11) {
             return false;
         }

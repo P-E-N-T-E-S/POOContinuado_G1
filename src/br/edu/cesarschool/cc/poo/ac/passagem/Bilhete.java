@@ -48,12 +48,12 @@ public class Bilhete extends Registro {
     }
 
     public double obterValorPontuacao() {
-        return pagamentoEmPontos / 20.0;
+        return obterValorPago() / 20.0;
     }
 
     public String gerarNumero() {
         String cpfCliente = cliente.getCpf();
-        String numeroVoo = voo.obterIdVoo();
+        int numeroVoo = voo.getNumeroVoo();
         int ano = dataHora.getYear();
         int mes = dataHora.getMonthValue();
         int dia = dataHora.getDayOfMonth();

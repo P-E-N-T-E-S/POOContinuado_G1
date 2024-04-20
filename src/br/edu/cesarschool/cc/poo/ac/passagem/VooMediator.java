@@ -25,7 +25,7 @@ public class VooMediator {
     private VooMediator() {
     }
 
-    public static synchronized VooMediator getInstance() {
+    public static synchronized VooMediator obterInstancia() {
         if (instance == null) {
             instance = new VooMediator();
         }
@@ -37,34 +37,47 @@ public class VooMediator {
     }
 
     public String validarCiaNumero(String companhiaAerea, int numeroVoo){
-        boolean validacaoCia = (StringUtils.isVaziaOuNula(companhiaAerea)) && (companhiaAerea.length() > 2);
-        boolean validacaoNumero = (numeroVoo >= 1000) && (numeroVoo <= 9999);
+        boolean validacaoCia = (StringUtils.isVaziaOuNula(companhiaAerea)) && (companhiaAerea.length() == 2);
 
         if(!validacaoCia){
             return "CIA aerea errada";
         }
+
+        boolean validacaoNumero = (numeroVoo >= 1000) && (numeroVoo <= 9999);
+
         if(!validacaoNumero){
             return "Numero voo errado";
         }
+
         return null;
     }
 
     public String validar(Voo voo){
         boolean validarAeroportoOrigem = StringUtils.isVaziaOuNula(voo.getAeroportoOrigem())
                 && validarAeroporto(voo.getAeroportoOrigem());
-        boolean validarAeroportoDestino = StringUtils.isVaziaOuNula(voo.getAeroportoDestino())
-                && validarAeroporto(voo.getAeroportoDestino());
-        boolean validarAeroportoOrigemEDestino = voo.getAeroportoDestino().equals(voo.getAeroportoOrigem());
 
         if(!validarAeroportoOrigem){
             return "Aeroporto origem errado";
         }
+
+        boolean validarAeroportoDestino = StringUtils.isVaziaOuNula(voo.getAeroportoDestino())
+                && validarAeroporto(voo.getAeroportoDestino());
+
         if(!validarAeroportoDestino){
             return "Aeroporto destino errado";
         }
-        if(!validarAeroportoOrigemEDestino){
+        boolean validarAeroportoOrigemEDestino = voo.getAeroportoDestino().equals(voo.getAeroportoOrigem());
+
+        if(validarAeroportoOrigemEDestino){
             return "Aeroporto origem igual a aeroporto destino";
         }
+
+        String erro = validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
+
+        if(erro != null){
+            return erro;
+        }
+
         return null;
     }
 
@@ -96,7 +109,11 @@ public class VooMediator {
         }
     }
 
-    public String excluir(Voo voo){
+    public String excluir(String idvoo){
+        Voo voo = buscar(idvoo);
+        if(voo == null){
+            return "Voo inexistente";
+        }
         String erro = validar(voo);
         if(erro == null){
             boolean verificacao = vooDAO.excluir(voo.obterIdVoo());

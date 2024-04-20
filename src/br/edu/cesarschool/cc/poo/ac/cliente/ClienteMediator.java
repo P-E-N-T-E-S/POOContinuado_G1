@@ -10,7 +10,7 @@ public class ClienteMediator {
     private ClienteMediator() {
     }
 
-    public static synchronized ClienteMediator getInstance() {
+    public static synchronized ClienteMediator obterInstancia() {
         if (instance == null) {
             instance = new ClienteMediator();
         }
@@ -23,20 +23,25 @@ public class ClienteMediator {
 
     public String validar(Cliente cliente) {
         boolean cpfvalido = ValidadorCPF.isCpfValido(cliente.getCpf());
-        boolean nomevalido = (StringUtils.isVaziaOuNula(cliente.getNome())) && (cliente.getNome().length() > 2);
-        boolean saldovalido = cliente.getSaldoPontos() > 0;
+
+        boolean nomevalido = (StringUtils.isVaziaOuNula(cliente.getNome())) && (cliente.getNome().length() >= 2);
+        if(!nomevalido){
+            return "nome errado";
+        }
 
         if(!cpfvalido){
             return "CPF errado";
         }
-        if(!nomevalido){
-            return "nome errado";
-        }
+
+        boolean saldovalido = cliente.getSaldoPontos() >= 0;
+
         if(!saldovalido){
             return "saldo errado";
         }
+
         return null;
     }
+
 
     public String incluir(Cliente cliente) {
         String erro = validar(cliente);
@@ -66,7 +71,11 @@ public class ClienteMediator {
         }
     }
 
-    public String excluir(Cliente cliente) {
+    public String excluir(String cpf) {
+        Cliente cliente = buscar(cpf);
+        if(cliente == null){
+            return "Cliente inexistente";
+        }
         String erro = validar(cliente);
         if(erro == null){
             boolean exclusao = clienteDao.excluir(cliente.getCpf());

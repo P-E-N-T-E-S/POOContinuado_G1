@@ -9,12 +9,20 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class BilheteMediator {
+    private static BilheteMediator instance;
     private BilheteDAO bilheteDAO = new BilheteDAO();
     private BilheteVipDAO bilheteVipDAO = new BilheteVipDAO();
-    private VooMediator vooMediator = VooMediator.getInstance();
-    private ClienteMediator clienteMediator = ClienteMediator.getInstance();
+    private VooMediator vooMediator = VooMediator.obterInstancia();
+    private ClienteMediator clienteMediator = ClienteMediator.obterInstancia();
 
     private BilheteMediator() {
+    }
+
+    public static synchronized BilheteMediator obterInstancia() {
+        if (instance == null) {
+            instance = new BilheteMediator();
+        }
+        return instance;
     }
 
     public Bilhete buscar(String numeroBilhete) {
@@ -26,34 +34,44 @@ public class BilheteMediator {
     }
 
     public String validar(String cpf, String ciaAerea, int numeroVoo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
-        VooMediator vooMediator = VooMediator.getInstance();
-        ClienteMediator clienteMediator = ClienteMediator.getInstance();
+        VooMediator vooMediator = VooMediator.obterInstancia();
+        ClienteMediator clienteMediator = ClienteMediator.obterInstancia();
         LocalDateTime agora = LocalDateTime.now();
 
         boolean validacaoCPF = ValidadorCPF.isCpfValido(cpf);
-        String validacaoNumeroVoo = vooMediator.validarCiaNumero(ciaAerea, numeroVoo);
-        boolean validacaoPreco = preco > 0;
-        boolean validacaoPagamentoEmPontos = pagamentoEmPontos > 0;
-        boolean validacaoPrecoEPontos = preco >= pagamentoEmPontos;
-        boolean validacaoDataHora = (agora.until(dataHora, ChronoUnit.HOURS) >= 1);
 
         if (!validacaoCPF) {
             return "CPF errado";
         }
+
+        String validacaoNumeroVoo = vooMediator.validarCiaNumero(ciaAerea, numeroVoo);
+
         if (validacaoNumeroVoo != null) {
             return validacaoNumeroVoo;
         }
+
+        boolean validacaoPreco = preco > 0;
+
         if (!validacaoPreco) {
             return "Preco errado";
         }
+
+        boolean validacaoPagamentoEmPontos = pagamentoEmPontos >= 0;
+
         if (!validacaoPagamentoEmPontos) {
             return "Pagamento pontos errado";
         }
+
+        boolean validacaoPrecoEPontos = preco >= pagamentoEmPontos;
+
         if (!validacaoPrecoEPontos) {
-            return "Preco menor que pagamento em pontos errado";
+            return "Preco menor que pagamento em pontos";
         }
+
+        boolean validacaoDataHora = (agora.until(dataHora, ChronoUnit.HOURS) >= 1);
+
         if (!validacaoDataHora) {
-            return "Data hora errado";
+            return "data hora invalida";
         }
         return null;
     }
@@ -132,9 +150,9 @@ public class BilheteMediator {
 
         BilheteVip bilheteVip = new BilheteVip(cliente, vooBuscado, preco, pagamentoEmPontos, dataHora, bonusPontuacao);
         cliente.debitarPontos(valorPontosNecessarios);
-        cliente.creditarPontos(bilheteVip.obterValorPontuacao());
+        cliente.creditarPontos(bilheteVip.obterValorPontuacaoVip());
 
-        if (!bilheteDAO.incluir(bilheteVip)) {
+        if (!bilheteVipDAO.incluir(bilheteVip)) {
             return new ResultadoGeracaoBilhete(null, null, "Bilhete vip ja existente");
         }
 

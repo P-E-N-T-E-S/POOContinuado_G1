@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class TelaCliente {
-    private ClienteMediator clienteMediator = ClienteMediator.getInstance();
+    private ClienteMediator clienteMediator = ClienteMediator.obterInstancia();
     private static final Scanner ENTRADA = new Scanner(System.in);
     private static final BufferedReader ENTRADA_STR = new BufferedReader(new InputStreamReader(System.in));
 
@@ -93,8 +93,9 @@ public class TelaCliente {
     }
 
     private void processaExclusao() {
-        Cliente cliente = processaBusca();
-        String retorno = clienteMediator.excluir(cliente);
+        System.out.print("Digite o cpf do cliente: ");
+        String cpf = lerString();
+        String retorno = clienteMediator.excluir(cpf);
         if (retorno == null) {
             System.out.println("Cliente excluído com sucesso!");
         } else {

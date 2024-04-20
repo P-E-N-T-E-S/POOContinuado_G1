@@ -20,6 +20,6 @@ public class BilheteVip extends Bilhete {
     }
 
     public double obterValorPontuacaoVip() {
-        return obterValorPontuacao() * (1 + bonusPontuacao / 100);
+        return (obterValorPontuacao() + ((obterValorPontuacao() * bonusPontuacao)/100));
     }
 }

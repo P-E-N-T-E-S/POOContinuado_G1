@@ -5,6 +5,9 @@ public class StringUtils {
 
     }
     public static boolean isVaziaOuNula(String valor){
+        if(valor == null){
+            return false;
+        }
         if(valor.trim().equals("")){
             return false;
         }else{
