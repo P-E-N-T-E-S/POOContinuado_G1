@@ -153,7 +153,7 @@ public class BilheteMediator {
         cliente.creditarPontos(bilheteVip.obterValorPontuacaoVip());
 
         if (!bilheteVipDAO.incluir(bilheteVip)) {
-            return new ResultadoGeracaoBilhete(null, null, "Bilhete vip ja existente");
+            return new ResultadoGeracaoBilhete(null, null, "Bilhete ja existente");
         }
 
         if (clienteMediator.alterar(cliente) != null) {
