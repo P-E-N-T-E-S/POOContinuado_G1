@@ -50,7 +50,7 @@ public class TelaCliente {
         String cpf = lerString();
         System.out.println("Insira o nome do cliente: ");
         String nome = lerString();
-        System.out.println("Insira o saldo do cliente");
+        System.out.println("Insira o saldo do cliente: ");
         double saldo = ENTRADA.nextDouble();
         Cliente cliente = new Cliente(cpf, nome, saldo);
         String retorno = clienteMediator.incluir(cliente);
@@ -65,7 +65,7 @@ public class TelaCliente {
         String cpf = processaBusca().getCpf();
         System.out.println("Insira o nome do cliente: ");
         String nome = lerString();
-        System.out.println("Insira o saldo do cliente");
+        System.out.println("Insira o saldo do cliente: ");
         double saldo = ENTRADA.nextDouble();
         Cliente cliente = new Cliente(cpf, nome, saldo);
         String retorno = clienteMediator.alterar(cliente);
@@ -84,7 +84,7 @@ public class TelaCliente {
             System.out.println("Cliente nao encontrado");
             return null;
         } else {
-            // Mostrar todos os atributos do Produto!!
+            // Mostrar todos os atributos do Cliente!!
             System.out.println("Nome: " + cliente.getNome());
             System.out.println("CPF: " + cliente.getCpf());
             System.out.println("Saldo: " + cliente.getSaldoPontos());
