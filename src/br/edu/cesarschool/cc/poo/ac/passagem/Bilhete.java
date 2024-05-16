@@ -11,9 +11,9 @@ public class Bilhete extends Registro {
 	private double preco;
 	private double pagamentoEmPontos;
 	private LocalDateTime dataHora;
-	
-	public Bilhete(Cliente cliente, Voo voo, double preco, double pagamentoEmPontos, 
-			LocalDateTime dataHora) {
+
+	public Bilhete(Cliente cliente, Voo voo, double preco, double pagamentoEmPontos,
+				   LocalDateTime dataHora) {
 		this.cliente = cliente;
 		this.voo = voo;
 		this.preco = preco;
@@ -46,16 +46,20 @@ public class Bilhete extends Registro {
 	}
 
 	public double obterValorPontuacao() {
-		return (preco - pagamentoEmPontos)/20;
+		return (preco - pagamentoEmPontos) / 20;
 	}
+
 	public double obterValorPago() {
 		return (preco - pagamentoEmPontos);
 	}
+
 	public String gerarNumero() {
-		return cliente.getCpf() + voo.getNumeroVoo() + 
-				dataHora.getYear() + dataHora.getMonthValue() + 
+		return cliente.getCpf() + voo.getNumeroVoo() +
+				dataHora.getYear() + dataHora.getMonthValue() +
 				dataHora.getDayOfMonth();
 	}
+
+	@Override
 	public String getIdUnico() {
 		return gerarNumero();
 	}
