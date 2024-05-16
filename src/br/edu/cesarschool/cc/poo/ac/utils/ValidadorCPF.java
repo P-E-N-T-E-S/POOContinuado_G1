@@ -1,38 +1,29 @@
 package br.edu.cesarschool.cc.poo.ac.utils;
 
 public class ValidadorCPF {
-    private ValidadorCPF() {
-    }
-    public static boolean isCpfValido(String cpf) {
-        if(cpf == null) {
-            return false;
-        }
-        if (cpf.length() != 11) {
-            return false;
-        }
-
-        if (cpf.matches("(\\d)\\1{10}")) {
-            return false;
-        }
-
+	private ValidadorCPF() {
+		
+	}
+	public static boolean isCpfValido(String cpf) {
+		return !StringUtils.isVaziaOuNula(cpf) && isDvFormatoValido(cpf); 
+	}
+	private static boolean isDvFormatoValido(String cpf) {
+        if (cpf.length() != 11) return false;
+        int i = 10;
         int soma = 0;
-        for (int i = 0; i < 9; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
+        int digitoVerificador = 0;
+        for (char c: cpf.toCharArray()) {
+            if (!Character.isDigit(c)) return false;
+            if (i >= 2) {
+                soma += Character.getNumericValue(c) * i;
+            }
+            if (i == 1) {
+                digitoVerificador = Character.getNumericValue(c);
+            }
+            i--;
         }
-        int digito1 = 11 - (soma % 11);
-        if (digito1 > 9) {
-            digito1 = 0;
-        }
-
-        soma = 0;
-        for (int i = 0; i < 10; i++) {
-            soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
-        }
-        int digito2 = 11 - (soma % 11);
-        if (digito2 > 9) {
-            digito2 = 0;
-        }
-
-        return Character.getNumericValue(cpf.charAt(9)) == digito1 && Character.getNumericValue(cpf.charAt(10)) == digito2;
-    }
+        int resto = (soma * 10) % 11;
+        return resto == digitoVerificador;
+	}	
 }
+
