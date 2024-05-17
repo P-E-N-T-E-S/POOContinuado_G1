@@ -1,5 +1,6 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
+import br.edu.cesarschool.cc.poo.ac.utils.DiasDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
 
 public class VooMediator {
@@ -48,6 +49,26 @@ public class VooMediator {
 		}		
 		if (aeOrigem.equals(aeDestino)) {
 			return "Aeroporto origem igual a aeroporto destino";
+		}
+		int[] diasrepetidos = new int[7];
+		int k = 0;
+		for(DiasDaSemana dia : voo.getDiasDaSemana()){
+			if(DiasDaSemana.getDiasDaSemana(dia.getCodigo()) == null){
+				return "Dias da semana nao informados";
+			}else{
+				for (int i = 0; i < diasrepetidos.length; i++) {
+					if (diasrepetidos[i] == dia.getCodigo()) {
+						return "Dia da semana repetido";
+					}
+				}
+				diasrepetidos[k] = dia.getCodigo();
+			}
+		}
+		if (voo.getHora() == null){
+			return "Hora nao informada";
+		}
+		if(voo.getHora().getNano() != 0){
+			return "Hora invalida";
 		}
 		return validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
 	}

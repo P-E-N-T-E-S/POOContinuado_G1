@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 import br.edu.cesarschool.cc.poo.ac.cliente.ClienteMediator;
+import br.edu.cesarschool.cc.poo.ac.utils.DiasDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.ValidadorCPF;
 
 public class BilheteMediator {
@@ -29,6 +30,7 @@ public class BilheteMediator {
 	public BilheteVip buscarVip(String numeroBilhete) {
 		return bilheteVipDao.buscar(numeroBilhete);
 	}
+
 	public String validar(String cpf, String ciaAerea, int numeroVoo, 
 			double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
 		if (!ValidadorCPF.isCpfValido(cpf)) {
@@ -50,9 +52,10 @@ public class BilheteMediator {
 		}
 		if (dataHora == null || LocalDateTime.now().plusHours(1).isAfter(dataHora)) {
 			return "data hora invalida";
-		}
+		} //dúvida na hora de implementar as validacoes de horas, visto que nao temos a classe VOO
 		return null;
 	}
+
 	private ResultadoAuxiliar gerarBilheteAux(String cpf, String ciaAerea, int numeroVoo, 
 			double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
 		String msg = validar(cpf, ciaAerea, numeroVoo, preco, pagamentoEmPontos, dataHora);
