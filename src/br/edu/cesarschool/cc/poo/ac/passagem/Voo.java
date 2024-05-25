@@ -44,7 +44,6 @@ public class Voo extends Registro {
 		return companhiaAerea + numeroVoo;
 	}
 
-	@Override
 	public LocalTime getHora() {
 		return hora;
 	}

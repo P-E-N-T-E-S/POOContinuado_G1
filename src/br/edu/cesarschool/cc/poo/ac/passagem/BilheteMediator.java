@@ -52,7 +52,27 @@ public class BilheteMediator {
 		}
 		if (dataHora == null || LocalDateTime.now().plusHours(1).isAfter(dataHora)) {
 			return "data hora invalida";
-		} //dúvida na hora de implementar as validacoes de horas, visto que nao temos a classe VOO
+		}
+		String idVoo = ciaAerea + numeroVoo;
+		Voo voo = vooMediator.buscar(idVoo);
+		if(voo == null){
+			return "Voo nao encontrado";
+		}
+		boolean valido = false;
+		int diaAValidar = dataHora.getDayOfWeek().getValue();
+		for(DiasDaSemana dia : voo.getDiasDaSemana()){
+			if(dia.getCodigo() == diaAValidar){
+				valido = true;
+				break;
+			}
+		}
+		if(!valido){
+			return "Voo nao disponivel";
+		}
+		if(!(dataHora.getHour() == voo.getHora().getHour() && dataHora.getMinute() == voo.getHora().getMinute())){
+			return "Hora diferente da especificada no voo";
+		}
+		//buscar pelo voomediator, devo criar um voo com as infos, pedir pra ele criar um ID e depois procurar o voo original por esse ID
 		return null;
 	}
 
