@@ -1,11 +1,17 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 import br.edu.cesarschool.cc.poo.ac.cliente.ClienteMediator;
 import br.edu.cesarschool.cc.poo.ac.utils.DiasDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.ValidadorCPF;
+import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Comparador;
+import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Ordenadora;
+import br.edu.cesarschool.cc.poo.ac.negocio.comparadores.ComparadorBilhetePreco;
+import br.edu.cesarschool.cc.poo.ac.negocio.comparadores.ComparadorBilheteDataHora;
 
 public class BilheteMediator {
 	private static BilheteMediator instancia;
@@ -14,25 +20,26 @@ public class BilheteMediator {
 	private BilheteVipDAO bilheteVipDao = new BilheteVipDAO();
 	private ClienteMediator clienteMediator = ClienteMediator.obterInstancia();
 	private VooMediator vooMediator = VooMediator.obterInstancia();
-	
+
 	public static BilheteMediator obterInstancia() {
 		if (instancia == null) {
 			instancia = new BilheteMediator();
 		}
 		return instancia;
 	}
-	
+
 	private BilheteMediator() {}
-	
+
 	public Bilhete buscar(String numeroBilhete) {
 		return bilheteDao.buscar(numeroBilhete);
 	}
+
 	public BilheteVip buscarVip(String numeroBilhete) {
 		return bilheteVipDao.buscar(numeroBilhete);
 	}
 
-	public String validar(String cpf, String ciaAerea, int numeroVoo, 
-			double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
+	public String validar(String cpf, String ciaAerea, int numeroVoo,
+						  double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
 		if (!ValidadorCPF.isCpfValido(cpf)) {
 			return "CPF errado";
 		} else {
@@ -40,7 +47,7 @@ public class BilheteMediator {
 			if (msg != null) {
 				return msg;
 			}
-		} 
+		}
 		if (preco <= 0) {
 			return "Preco errado";
 		}
@@ -72,12 +79,11 @@ public class BilheteMediator {
 		if(!(dataHora.getHour() == voo.getHora().getHour() && dataHora.getMinute() == voo.getHora().getMinute())){
 			return "Hora diferente da especificada no voo";
 		}
-		//buscar pelo voomediator, devo criar um voo com as infos, pedir pra ele criar um ID e depois procurar o voo original por esse ID
 		return null;
 	}
 
-	private ResultadoAuxiliar gerarBilheteAux(String cpf, String ciaAerea, int numeroVoo, 
-			double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
+	private ResultadoAuxiliar gerarBilheteAux(String cpf, String ciaAerea, int numeroVoo,
+											  double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
 		String msg = validar(cpf, ciaAerea, numeroVoo, preco, pagamentoEmPontos, dataHora);
 		if (msg != null) {
 			return new ResultadoAuxiliar(null, null, new ResultadoGeracaoBilhete(null, null, msg), 0);
@@ -98,12 +104,13 @@ public class BilheteMediator {
 		}
 		return new ResultadoAuxiliar(vooCad, cli, null, valorNecessarioPontos);
 	}
-	public ResultadoGeracaoBilhete gerarBilhete(String cpf, String ciaAerea, int numeroVoo, 
-			double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
-		ResultadoAuxiliar res = gerarBilheteAux(cpf, ciaAerea, numeroVoo, 
+
+	public ResultadoGeracaoBilhete gerarBilhete(String cpf, String ciaAerea, int numeroVoo,
+												double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
+		ResultadoAuxiliar res = gerarBilheteAux(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
 		if (res.getRes() != null) {
-			return res.getRes(); 
+			return res.getRes();
 		}
 		Cliente cli = res.getCliente();
 		Bilhete bilhete = new Bilhete(cli, res.getVoo(), preco, pagamentoEmPontos, dataHora);
@@ -115,18 +122,19 @@ public class BilheteMediator {
 		String msg = clienteMediator.alterar(cli);
 		if (msg != null) {
 			return new ResultadoGeracaoBilhete(null, null, msg);
-		} 
+		}
 		return new ResultadoGeracaoBilhete(bilhete, null, null);
 	}
-	public ResultadoGeracaoBilhete gerarBilheteVip(String cpf, String ciaAerea, int numeroVoo, 
-			double preco, double pagamentoEmPontos, LocalDateTime dataHora, double bonusPontuacao) {
-		ResultadoAuxiliar res = gerarBilheteAux(cpf, ciaAerea, numeroVoo, 
+
+	public ResultadoGeracaoBilhete gerarBilheteVip(String cpf, String ciaAerea, int numeroVoo,
+												   double preco, double pagamentoEmPontos, LocalDateTime dataHora, double bonusPontuacao) {
+		ResultadoAuxiliar res = gerarBilheteAux(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
 		if (res.getRes() != null) {
-			return res.getRes(); 
+			return res.getRes();
 		}
 		Cliente cli = res.getCliente();
-		BilheteVip bilhete = new BilheteVip(cli, res.getVoo(), preco, pagamentoEmPontos, 
+		BilheteVip bilhete = new BilheteVip(cli, res.getVoo(), preco, pagamentoEmPontos,
 				dataHora, bonusPontuacao);
 		cli.debitarPontos(res.getValorNecessarioPontos());
 		cli.creditarPontos(bilhete.obterValorPontuacaoVip());
@@ -136,7 +144,27 @@ public class BilheteMediator {
 		String msg = clienteMediator.alterar(cli);
 		if (msg != null) {
 			return new ResultadoGeracaoBilhete(null, null, msg);
-		} 
-		return new ResultadoGeracaoBilhete(null, bilhete, null);		
+		}
+		return new ResultadoGeracaoBilhete(null, bilhete, null);
+	}
+
+
+	public Bilhete[] obterBilhetesPorPreco() {
+		Bilhete[] todosBilhetes = bilheteDao.buscarTodos();
+		Ordenadora.ordenar(todosBilhetes, new ComparadorBilhetePreco());
+		return todosBilhetes;
+	}
+
+	public Bilhete[] obterBilhetesPorDataHora(double precoMin) {
+		Bilhete[] todosBilhetes = bilheteDao.buscarTodos();
+		List<Bilhete> filtrados = new ArrayList<>();
+		for (Bilhete bilhete : todosBilhetes) {
+			if (bilhete.getPreco() <= precoMin) {
+				filtrados.add(bilhete);
+			}
+		}
+		Bilhete[] bilhetesArray = filtrados.toArray(new Bilhete[0]);
+		Ordenadora.ordenar(bilhetesArray, new ComparadorBilheteDataHora());
+		return bilhetesArray;
 	}
 }

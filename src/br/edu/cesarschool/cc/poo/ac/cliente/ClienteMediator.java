@@ -1,7 +1,11 @@
 package br.edu.cesarschool.cc.poo.ac.cliente;
 
+import br.edu.cesarschool.cc.poo.ac.negocio.comparadores.ComparadorBilhetePreco;
+import br.edu.cesarschool.cc.poo.ac.passagem.Bilhete;
 import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
 import br.edu.cesarschool.cc.poo.ac.utils.ValidadorCPF;
+import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Ordenadora;
+import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Comparador;
 
 public class ClienteMediator {
 	private static final String CLIENTE_INEXISTENTE = "Cliente inexistente";
@@ -61,5 +65,19 @@ public class ClienteMediator {
 			return CLIENTE_INEXISTENTE;
 		}
 		return null;
+	}
+
+	public Cliente[] obterClientesPorNome() {
+		Cliente[] todosClientes = clienteDao.buscarTodos();
+		Comparador comparadorNome = new Comparador() {
+			@Override
+			public int comparar(Object o1, Object o2) {
+				Cliente cliente1 = (Cliente) o1;
+				Cliente cliente2 = (Cliente) o2;
+				return cliente1.getNome().compareToIgnoreCase(cliente2.getNome());
+			}
+		};
+		Ordenadora.ordenar(todosClientes, comparadorNome);
+		return todosClientes;
 	}
 }

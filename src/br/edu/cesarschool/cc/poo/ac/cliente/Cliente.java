@@ -1,8 +1,9 @@
 package br.edu.cesarschool.cc.poo.ac.cliente;
 
+import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Comparavel;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
-public class Cliente extends Registro {
+public class Cliente extends Registro implements Comparavel {
 	private String cpf;
 	private String nome;
 	private double saldoPontos;
@@ -40,5 +41,16 @@ public class Cliente extends Registro {
 	@Override
 	public String getIdUnico() {
 		return getCpf();
+	}
+
+	@Override
+	public int comparar(Object o) {
+		Cliente outro = (Cliente) o;
+		return this.nome.compareTo(outro.getNome());
+	}
+
+	@Override
+	public String toString() {
+		return  nome + cpf + saldoPontos;
 	}
 }
