@@ -1,14 +1,11 @@
 package br.edu.cesarschool.cc.poo.ac.cliente.comexcecao;
-import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 import java.util.Scanner;
 
 public class TelaCliente {
     private ClienteMediator clienteMediator = ClienteMediator.obterInstancia();
     private static final Scanner ENTRADA = new Scanner(System.in);
-    private static final BufferedReader ENTRADA_STR = new BufferedReader(new InputStreamReader(System.in));
 
     public void inicializaTelasCadastroProduto() {
         while(true){
@@ -48,68 +45,80 @@ public class TelaCliente {
     }
 
     public void processaInclusao() {
-        System.out.println("Insira o cpf do cliente: ");
-        String cpf = lerString();
-        System.out.println("Insira o nome do cliente: ");
-        String nome = lerString();
-        System.out.println("Insira o saldo do cliente: ");
-        double saldo = ENTRADA.nextDouble();
-        Cliente cliente = new Cliente(cpf, nome, saldo);
-        String retorno = clienteMediator.incluir(cliente);
-        if (retorno == null) {
+        try {
+            System.out.println("Insira o cpf do cliente: ");
+            String cpf = ENTRADA.next();
+            System.out.println("Insira o nome do cliente: ");
+            String nome = ENTRADA.next();
+            System.out.println("Insira o saldo do cliente: ");
+            double saldo = ENTRADA.nextDouble();
+            Cliente cliente = new Cliente(cpf, nome, saldo);
+            clienteMediator.incluir(cliente);
             System.out.println("Cliente incluído com sucesso!");
-        } else {
-            System.out.println(retorno);
+        } catch (ExcecaoRegistroJaExistente e) {
+            System.out.println(e.getMessage());
+        } catch (ExcecaoValidacao e) {
+            for (String mensagem : e.getMensagens()) {
+                System.out.println(mensagem);
+            }
         }
     }
 
     public void processaAlteracao() {
-        String cpf = processaBusca().getCpf();
-        System.out.println("Insira o nome do cliente: ");
-        String nome = lerString();
-        System.out.println("Insira o saldo do cliente: ");
-        double saldo = ENTRADA.nextDouble();
-        Cliente cliente = new Cliente(cpf, nome, saldo);
-        String retorno = clienteMediator.alterar(cliente);
-        if (retorno == null) {
+        try {
+            System.out.println("Digite o cpf do cliente que deseja alterar: ");
+            String cpf = ENTRADA.next();
+            Cliente cliente = clienteMediator.buscar(cpf);
+            if (cliente == null) {
+                System.out.println("Cliente não encontrado.");
+                return;
+            }
+            System.out.println("Insira o novo nome do cliente: ");
+            String nome = ENTRADA.next();
+            System.out.println("Insira o novo saldo do cliente: ");
+            double saldo = ENTRADA.nextDouble();
+            cliente.setNome(nome);
+            cliente.setSaldoPontos(saldo);
+            clienteMediator.alterar(cliente);
             System.out.println("Cliente alterado com sucesso!");
-        } else {
-            System.out.println(retorno);
-        }
-    }
-
-    public Cliente processaBusca() {
-        System.out.print("Digite o cpf do cliente: ");
-        String cpf = lerString();
-        Cliente cliente = clienteMediator.buscar(cpf);
-        if (cliente == null) {
-            System.out.println("Cliente nao encontrado");
-            return null;
-        } else {
-            // Mostrar todos os atributos do Cliente!!
-            System.out.println("Nome: " + cliente.getNome());
-            System.out.println("CPF: " + cliente.getCpf());
-            System.out.println("Saldo: " + cliente.getSaldoPontos());
-            return cliente;
+        } catch (ExcecaoRegistroInexistente e) {
+            System.out.println(e.getMessage());
+        } catch (ExcecaoValidacao e) {
+            for (String mensagem : e.getMensagens()) {
+                System.out.println(mensagem);
+            }
         }
     }
 
     public void processaExclusao() {
-        System.out.print("Digite o cpf do cliente: ");
-        String cpf = lerString();
-        String retorno = clienteMediator.excluir(cpf);
-        if (retorno == null) {
+        try {
+            System.out.println("Digite o cpf do cliente que deseja excluir: ");
+            String cpf = ENTRADA.next();
+            clienteMediator.excluir(cpf);
             System.out.println("Cliente excluído com sucesso!");
-        } else {
-            System.out.println(retorno);
+        } catch (ExcecaoRegistroInexistente e) {
+            System.out.println(e.getMessage());
+        } catch (ExcecaoValidacao e) {
+            for (String mensagem : e.getMensagens()) {
+                System.out.println(mensagem);
+            }
         }
     }
 
-    public String lerString() {
+    public void processaBusca() {
         try {
-            return ENTRADA_STR.readLine();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("Digite o cpf do cliente que deseja buscar: ");
+            String cpf = ENTRADA.next();
+            Cliente cliente = clienteMediator.buscar(cpf);
+            if (cliente == null) {
+                System.out.println("Cliente não encontrado.");
+            } else {
+                System.out.println("Nome: " + cliente.getNome());
+                System.out.println("CPF: " + cliente.getCpf());
+                System.out.println("Saldo: " + cliente.getSaldoPontos());
+            }
+        } catch (ExcecaoRegistroInexistente e) {
+            System.out.println(e.getMessage());
         }
     }
 }
