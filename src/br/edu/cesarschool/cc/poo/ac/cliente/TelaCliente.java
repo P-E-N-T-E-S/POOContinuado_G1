@@ -8,7 +8,6 @@ public class TelaCliente {
     Scanner scanner = new Scanner(System.in);
 
     public TelaCliente() {
-        // Construtor padrão
     }
 
     public void exibirMenuPrincipal() {
@@ -55,7 +54,6 @@ public class TelaCliente {
     }
 
     public void incluirCliente() {
-        // Implementar a lógica de inclusão de cliente
         System.out.println("Digite o nome do cliente:");
         String nome = scanner.nextLine();
         System.out.println("Digite o CPF do cliente:");
@@ -76,7 +74,6 @@ public class TelaCliente {
     }
 
     public void alterarCliente() {
-        // Implementar a lógica de alteração de cliente
         System.out.println("Digite o CPF do cliente:");
         String cpf = scanner.next();
         scanner.nextLine();
@@ -110,7 +107,6 @@ public class TelaCliente {
     }
 
     public void excluirCliente() {
-        // Implementar a lógica de exclusão de cliente
         System.out.println("Digite o CPF do cliente:");
         String cpf = scanner.next();
 
@@ -137,7 +133,6 @@ public class TelaCliente {
     }
 
     public void buscarCliente() {
-        // Implementar a lógica de busca de cliente
  
         System.out.println("Digite o CPF do cliente:");
         String cpf = scanner.next();

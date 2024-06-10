@@ -10,7 +10,6 @@ public class TelaCliente {
     Scanner scanner = new Scanner(System.in);
 
     public TelaCliente() {
-        // Construtor padrão
     }
 
     public void exibirMenuPrincipal() {
@@ -118,8 +117,6 @@ public class TelaCliente {
     public void excluirCliente() {
         System.out.println("Digite o CPF do cliente:");
         String cpf = scanner.next();
-
-        //Cliente cliente = clienteMediator.buscar(cpf);
 
         try {
             clienteMediator.excluir(cpf);
