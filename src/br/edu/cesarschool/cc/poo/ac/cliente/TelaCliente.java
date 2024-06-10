@@ -1,113 +1,158 @@
 package br.edu.cesarschool.cc.poo.ac.cliente;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+
 import java.util.Scanner;
 
 public class TelaCliente {
     private ClienteMediator clienteMediator = ClienteMediator.obterInstancia();
-    private static final Scanner ENTRADA = new Scanner(System.in);
-    private static final BufferedReader ENTRADA_STR = new BufferedReader(new InputStreamReader(System.in));
 
-    public void inicializaTelasCadastroProduto() {
-        while(true){
-            imprimeMenuPrincipal();
-            int opcao = ENTRADA.nextInt();
-            switch (opcao){
+    Scanner scanner = new Scanner(System.in);
+
+    public TelaCliente() {
+        // Construtor padrão
+    }
+
+    public void exibirMenuPrincipal() {
+        System.out.println("Menu Principal");
+        System.out.println("1. Incluir");
+        System.out.println("2. Alterar");
+        System.out.println("3. Excluir");
+        System.out.println("4. Buscar");
+        System.out.println("5. Sair");
+    }
+
+    public void iniciar() {
+        boolean rodar = true;
+        while (rodar) {
+            exibirMenuPrincipal();
+            int opcao = lerOpcao();
+            switch (opcao) {
                 case 1:
-                    processaInclusao();
+                    incluirCliente();
                     break;
                 case 2:
-                    processaAlteracao();
+                    alterarCliente();
                     break;
                 case 3:
-                    processaExclusao();
+                    excluirCliente();
                     break;
                 case 4:
-                    processaBusca();
+                    buscarCliente();
                     break;
                 case 5:
-                    System.out.println("Saindo do cadastro de clientes");
-                    System.exit(0);
+                    rodar = false;
                     break;
                 default:
-                    System.out.println("Opção inválida!!");
+                    System.out.println("Opção inválida. Tente novamente.");
                     break;
             }
         }
     }
 
-    private void imprimeMenuPrincipal() {
-        System.out.println("1- Incluir");
-        System.out.println("2- Alterar");
-        System.out.println("3- Excluir");
-        System.out.println("4- Buscar");
-        System.out.println("5- Sair");
-        System.out.print("Digite a opção: ");
+    public int lerOpcao() {
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+        return opcao;
     }
 
-    private void processaInclusao() {
-        System.out.println("Insira o cpf do cliente: ");
-        String cpf = lerString();
-        System.out.println("Insira o nome do cliente: ");
-        String nome = lerString();
-        System.out.println("Insira o saldo do cliente: ");
-        double saldo = ENTRADA.nextDouble();
-        Cliente cliente = new Cliente(cpf, nome, saldo);
-        String retorno = clienteMediator.incluir(cliente);
-        if (retorno == null) {
-            System.out.println("Cliente incluído com sucesso!");
+    public void incluirCliente() {
+        // Implementar a lógica de inclusão de cliente
+        System.out.println("Digite o nome do cliente:");
+        String nome = scanner.nextLine();
+        System.out.println("Digite o CPF do cliente:");
+        String cpf = scanner.next();
+        System.out.println("Digite o saldo de pontos do cliente:");
+        double saldoPontos = scanner.nextDouble();
+        scanner.nextLine();
+        
+        Cliente cliente = new Cliente(cpf, nome, saldoPontos);
+        String mensagem = clienteMediator.incluir(cliente);
+        
+        if (mensagem != null) {
+            System.out.println(mensagem);
         } else {
-            System.out.println(retorno);
+            System.out.println("Cliente incluído com sucesso");
         }
+        
     }
 
-    private void processaAlteracao() {
-        String cpf = processaBusca().getCpf();
-        System.out.println("Insira o nome do cliente: ");
-        String nome = lerString();
-        System.out.println("Insira o saldo do cliente: ");
-        double saldo = ENTRADA.nextDouble();
-        Cliente cliente = new Cliente(cpf, nome, saldo);
-        String retorno = clienteMediator.alterar(cliente);
-        if (retorno == null) {
-            System.out.println("Cliente alterado com sucesso!");
-        } else {
-            System.out.println(retorno);
-        }
-    }
+    public void alterarCliente() {
+        // Implementar a lógica de alteração de cliente
+        System.out.println("Digite o CPF do cliente:");
+        String cpf = scanner.next();
+        scanner.nextLine();
 
-    private Cliente processaBusca() {
-        System.out.print("Digite o cpf do cliente: ");
-        String cpf = lerString();
         Cliente cliente = clienteMediator.buscar(cpf);
+
         if (cliente == null) {
-            System.out.println("Cliente nao encontrado");
-            return null;
+            System.out.println("Cliente não encontrado");
         } else {
-            // Mostrar todos os atributos do Cliente!!
+            System.out.println("Dados do cliente:");
             System.out.println("Nome: " + cliente.getNome());
             System.out.println("CPF: " + cliente.getCpf());
-            System.out.println("Saldo: " + cliente.getSaldoPontos());
-            return cliente;
+            System.out.println("Saldo de Pontos: " + cliente.getSaldoPontos());
+
+            System.out.println("Digite o novo nome do cliente:");
+            String novoNome = scanner.nextLine();
+            System.out.println("Digite o novo saldo do cliente:");
+            double novoSaldo = scanner.nextDouble();
+            scanner.nextLine();
+
+            Cliente clienteAlterado = new Cliente(cpf, novoNome, novoSaldo);
+            String mensagem = clienteMediator.alterar(clienteAlterado);
+
+            if (mensagem != null) {
+            System.out.println(mensagem);
+            } else {
+            System.out.println("Cliente alterado com sucesso");
+            }
         }
+        
     }
 
-    private void processaExclusao() {
-        System.out.print("Digite o cpf do cliente: ");
-        String cpf = lerString();
-        String retorno = clienteMediator.excluir(cpf);
-        if (retorno == null) {
-            System.out.println("Cliente excluído com sucesso!");
+    public void excluirCliente() {
+        // Implementar a lógica de exclusão de cliente
+        System.out.println("Digite o CPF do cliente:");
+        String cpf = scanner.next();
+
+        Cliente cliente = clienteMediator.buscar(cpf);
+
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado");
         } else {
-            System.out.println(retorno);
+            System.out.println("Dados do cliente:");
+            System.out.println("Nome: " + cliente.getNome());
+            System.out.println("CPF: " + cliente.getCpf());
+            System.out.println("Saldo de pontos: " + cliente.getSaldoPontos());
+
+            String mensagem = clienteMediator.excluir(cliente.getCpf());
+
+            if (mensagem != null) {
+                System.out.println(mensagem);
+            } else {
+                System.out.println("Cliente excluído com sucesso");
+            }
         }
+
+        
     }
 
-    private String lerString() {
-        try {
-            return ENTRADA_STR.readLine();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void buscarCliente() {
+        // Implementar a lógica de busca de cliente
+ 
+        System.out.println("Digite o CPF do cliente:");
+        String cpf = scanner.next();
+
+        Cliente cliente = clienteMediator.buscar(cpf);
+
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado");
+        } else {
+            System.out.println("Dados do cliente:");
+            System.out.println("Nome: " + cliente.getNome());
+            System.out.println("CPF: " + cliente.getCpf());
+            System.out.println("Saldo de pontos: " + cliente.getSaldoPontos());
         }
+
+        
     }
 }

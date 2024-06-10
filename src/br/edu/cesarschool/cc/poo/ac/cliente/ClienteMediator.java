@@ -1,86 +1,112 @@
 package br.edu.cesarschool.cc.poo.ac.cliente;
 
-import br.edu.cesarschool.cc.poo.ac.negocio.comparadores.ComparadorBilhetePreco;
-import br.edu.cesarschool.cc.poo.ac.passagem.Bilhete;
 import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
 import br.edu.cesarschool.cc.poo.ac.utils.ValidadorCPF;
-import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Ordenadora;
 import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Comparador;
+import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Ordenadora;
 
 public class ClienteMediator {
-	private static final String CLIENTE_INEXISTENTE = "Cliente inexistente";
-	private static final String CPF_ERRADO = "CPF errado";
-	private static final int TAM_MIN_NOME = 2;
-	private static final String NOME_ERRADO = "nome errado";
-	private static ClienteMediator instancia;
-	private ClienteDAO clienteDao = new ClienteDAO(); 
-	public static ClienteMediator obterInstancia() {
-		if (instancia == null) {
-			instancia = new ClienteMediator();
-		}
-		return instancia;
-	}
-	private ClienteMediator() {
-		
-	}
-	public String validar(Cliente cliente) {
-		if (cliente == null) {
-			return "Cliente nao informado"; 
-		} else if (!ValidadorCPF.isCpfValido(cliente.getCpf())) {
-			return CPF_ERRADO; 
-		} else if (StringUtils.isVaziaOuNula(cliente.getNome())) {
-			return NOME_ERRADO; 
-		} else if (cliente.getNome().length() < TAM_MIN_NOME) {
-			return NOME_ERRADO; 
-		} else if (cliente.getSaldoPontos() < 0) {
-			return "saldo errado";
-		}
-		return null;
-	}
-	public String incluir(Cliente cliente) {
-		String msg = validar(cliente);
-		if (msg == null) {
-			if (!clienteDao.incluir(cliente)) {
-				msg = "Cliente ja existente";
-			}
-		}
-		return msg;
-	}
-	public String alterar(Cliente cliente) {
-		String msg = validar(cliente);
-		if (msg == null) {
-			if (!clienteDao.alterar(cliente)) {
-				msg = CLIENTE_INEXISTENTE;
-			}
-		}
-		return msg;
-	}	
-	public Cliente buscar(String cpf) {
-		return clienteDao.buscar(cpf);
-	}
-	public String excluir(String cpf) {
-		if (!ValidadorCPF.isCpfValido(cpf)) {
-			return CPF_ERRADO; 		
-		} else if (!clienteDao.excluir(cpf)) {
-			return CLIENTE_INEXISTENTE;
-		}
-		return null;
-	}
+    private static ClienteMediator instancia;
+    private ClienteDAO clienteDao = new ClienteDAO();
 
-	public Cliente[] obterClientesPorNome() {
-		Cliente[] clientes = clienteDao.buscarTodos();
+    private ClienteMediator() {}
 
-		Ordenadora.ordenar(clientes, new Comparador() {
-			@Override
-			public int comparar(Object o1, Object o2) {
-				Cliente cliente = (Cliente) o1;
-				Cliente cliente_aux = (Cliente) o2;
+    public static ClienteMediator obterInstancia() {
+        if (instancia == null) {
+            instancia = new ClienteMediator();
+        }
+        return instancia;
+    }
 
-				int result = cliente.getNome().compareTo(cliente_aux.getNome());
-				return result;
-			}
-		});
+    public Cliente buscar(String cpf) {
+        return clienteDao.buscar(cpf);
+    }
 
-		return clientes;
-	}
+    public String validar(Cliente cliente) {
+        String mensagem = "";
+
+        if(!ValidadorCPF.isCpfValido(cliente.getCpf())) {
+            mensagem += "CPF errado";
+        }
+
+        if(StringUtils.isVaziaOuNula(cliente.getNome()) || cliente.getNome().length() < 2) {
+            mensagem += "nome errado";
+        }
+
+        if(cliente.getSaldoPontos() < 0) {
+            mensagem += "saldo errado";
+        }
+        
+        if(mensagem == "") {
+            return null;
+        }
+
+        return mensagem;
+
+    }
+
+    public String incluir(Cliente cliente) {
+        String erroValidacao = validar(cliente);
+        if(erroValidacao != null) {
+            return erroValidacao;
+        }
+
+        else {
+            if(!clienteDao.incluir(cliente)) {
+                return "Cliente ja existente";
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
+    public String alterar(Cliente cliente) {
+        String erroValidacao = validar(cliente);
+        if(erroValidacao != null) {
+            return erroValidacao;
+        }
+
+        else {
+            if(!clienteDao.alterar(cliente)) {
+                return "Cliente inexistente";
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
+    public String excluir(String cpf) {
+        if(!ValidadorCPF.isCpfValido(cpf)) {
+            return "CPF errado";
+        }
+
+        else {
+            if(!clienteDao.excluir(cpf)) {
+                return "Cliente inexistente";
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
+    public Cliente[] obterClientesPorNome() {
+        Cliente[] clientes = clienteDao.buscarTodos();
+        
+        Ordenadora.ordenar(clientes, new Comparador() {
+            @Override
+            public int comparar(Object o1, Object o2) {
+                Cliente cliente = (Cliente) o1;
+                Cliente cliente_aux = (Cliente) o2;
+
+                int result = cliente.getNome().compareTo(cliente_aux.getNome());
+                return result;
+            }
+        });
+        
+        return clientes;
+    }
+
 }

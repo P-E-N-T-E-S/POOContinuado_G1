@@ -7,10 +7,10 @@ import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Comparador;
 import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Ordenadora;
 
 public class ClienteMediator {
-    private static final String CPF_ERRADO = "CPF errado";
-    private static final String NOME_ERRADO = "Nome errado";
     private static ClienteMediator instancia;
     private ClienteDAO clienteDao = new ClienteDAO();
+
+    public ClienteMediator() {}
 
     public static ClienteMediator obterInstancia() {
         if (instancia == null) {
@@ -19,29 +19,29 @@ public class ClienteMediator {
         return instancia;
     }
 
-    private ClienteMediator() {
+    public Cliente buscar(String cpf) throws ExcecaoRegistroInexistente {
+        return clienteDao.buscar(cpf);
     }
 
     public void validar(Cliente cliente) throws ExcecaoValidacao {
-        ExcecaoValidacao excecaoValidacao = new ExcecaoValidacao("Erro de validação:");
+        ExcecaoValidacao excecaoValidacao = new ExcecaoValidacao();
 
-        if (cliente == null) {
-            excecaoValidacao.adicionarMensagem("Cliente Inexistente");
-        } else {
-            if (!ValidadorCPF.isCpfValido(cliente.getCpf())) {
-                excecaoValidacao.adicionarMensagem(CPF_ERRADO);
-            }
-            if (StringUtils.isVaziaOuNula(cliente.getNome()) || cliente.getNome().length() < 2) {
-                excecaoValidacao.adicionarMensagem(NOME_ERRADO);
-            }
-            if (cliente.getSaldoPontos() < 0) {
-                excecaoValidacao.adicionarMensagem("Saldo Invalido");
-            }
+        if(!ValidadorCPF.isCpfValido(cliente.getCpf())) {
+            excecaoValidacao.adicionarMensagem("CPF errado");
         }
 
-        if (excecaoValidacao.getMensagens().size() > 0) {
+        if(StringUtils.isVaziaOuNula(cliente.getNome()) || cliente.getNome().length() < 2) {
+            excecaoValidacao.adicionarMensagem("nome errado");
+        }
+
+        if(cliente.getSaldoPontos() < 0) {
+            excecaoValidacao.adicionarMensagem("saldo errado");
+        }
+        
+        if(!excecaoValidacao.getMensagens().isEmpty()) {
             throw excecaoValidacao;
         }
+
     }
 
     public void incluir(Cliente cliente) throws ExcecaoRegistroJaExistente, ExcecaoValidacao {
@@ -54,25 +54,30 @@ public class ClienteMediator {
         clienteDao.alterar(cliente);
     }
 
-    public Cliente buscar(String cpf) throws ExcecaoRegistroInexistente {
-        return clienteDao.buscar(cpf);
-    }
-
     public void excluir(String cpf) throws ExcecaoRegistroInexistente, ExcecaoValidacao {
-        if (!ValidadorCPF.isCpfValido(cpf)) {
-            throw new ExcecaoValidacao(CPF_ERRADO);
+        if(!ValidadorCPF.isCpfValido(cpf)) {
+            ExcecaoValidacao excecaoValidacao = new ExcecaoValidacao();
+            excecaoValidacao.adicionarMensagem("CPF errado");
+            throw excecaoValidacao;
         }
         clienteDao.excluir(cpf);
     }
 
     public Cliente[] obterClientesPorNome() {
-        Cliente[] todosClientes = clienteDao.buscarTodos();
-        Comparador comparadorNome = (o1, o2) -> {
-            Cliente cliente1 = (Cliente) o1;
-            Cliente cliente2 = (Cliente) o2;
-            return cliente1.getNome().compareToIgnoreCase(cliente2.getNome());
-        };
-        Ordenadora.ordenar(todosClientes, comparadorNome);
-        return todosClientes;
+        Cliente[] clientes = clienteDao.buscarTodos();
+        
+        Ordenadora.ordenar(clientes, new Comparador() {
+            @Override
+            public int comparar(Object o1, Object o2) {
+                Cliente cliente = (Cliente) o1;
+                Cliente cliente_aux = (Cliente) o2;
+
+                int result = cliente.getNome().compareTo(cliente_aux.getNome());
+                return result;
+            }
+        });
+        
+        return clientes;
     }
+
 }

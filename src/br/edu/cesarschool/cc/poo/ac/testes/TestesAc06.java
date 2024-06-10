@@ -1,4 +1,4 @@
-/*package br.edu.cesarschool.cc.poo.ac.testes;
+package br.edu.cesarschool.cc.poo.ac.testes;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -98,4 +98,4 @@ public class TestesAc06 extends TesteGeral {
         Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
         Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
     }
-}*/
+}

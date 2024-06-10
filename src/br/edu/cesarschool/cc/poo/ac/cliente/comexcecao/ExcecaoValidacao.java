@@ -1,22 +1,18 @@
 package br.edu.cesarschool.cc.poo.ac.cliente.comexcecao;
 
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.List;
+public class ExcecaoValidacao extends Exception {
+    private java.util.List<String> mensagens;
 
-public class ExcecaoValidacao extends Exception{
-    List<String> mensagens;
-
-    public ExcecaoValidacao(String mensagem) {
-        this.mensagens = new ArrayList<>();
-        this.mensagens.add(mensagem);
+    public ExcecaoValidacao() {
+        this.mensagens = new java.util.ArrayList<String>();
     }
 
-    public List<String> getMensagens() {
-        return this.mensagens;
+    public java.util.List<String> getMensagens() {
+        return mensagens;
     }
 
     public void adicionarMensagem(String mensagem) {
-        this.mensagens.add(mensagem);
+        mensagens.add(mensagem);
     }
+    
 }

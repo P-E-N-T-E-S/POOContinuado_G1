@@ -1,105 +1,150 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
-import br.edu.cesarschool.cc.poo.ac.utils.DiaDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
+import java.util.Set;
 
 public class VooMediator {
-	private static final String VOO_INEXISTENTE = "Voo inexistente";
-	private static VooMediator instancia;
-	private static final String[] AEROPORTOS = {"GRU", "CGH", "GIG", "SDU", 
-			"REC", "CWB", "POA", "BSB", "SSA", "FOR", "MAO", "SLZ", "CNF", 
-			"BEL", "JPA", "PNZ", "CAU", "FEN", "SET", "NAT", "PVH", "BVB", 
-			"FLN", "AJU", "PMW", "MCZ", "MCP", "VIX", "GYN", "CGB", "CGR", 
-			"THE", "RBR", "VCP", "RAO"};
-	private VooDAO vooDao = new VooDAO();
-	public static VooMediator obterInstancia() {
-		if (instancia == null) {
-			instancia = new VooMediator();
-		}
-		return instancia;
-	}
-	private VooMediator() {}
-	public String validarCiaNumero(String companhiaAerea, int numeroVoo) {
-		if (StringUtils.isVaziaOuNula(companhiaAerea) || 
-				companhiaAerea.length() != 2) {
-			return "CIA aerea errada";			
-		} else if (numeroVoo < 1000 || numeroVoo > 9999) {
-			return "Numero voo errado";
-		}
-		return null;
-	}
-	private boolean estaNaLista(String ae) {
-		for (String aeLista : AEROPORTOS) {
-			if (aeLista.equals(ae)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	public String validar(Voo voo) {		
-		String aeOrigem = voo.getAeroportoOrigem();
-		String aeDestino = voo.getAeroportoDestino();
-		if (StringUtils.isVaziaOuNula(aeOrigem) || 
-				!estaNaLista(aeOrigem)) {
-			return "Aeroporto origem errado";			
-		}
-		if (StringUtils.isVaziaOuNula(aeDestino) || 
-				!estaNaLista(aeDestino)) {
-			return "Aeroporto destino errado";			
-		}		
-		if (aeOrigem.equals(aeDestino)) {
-			return "Aeroporto origem igual a aeroporto destino";
-		}
-		int[] diasrepetidos = new int[7];
-		int k = 0;
-		for(DiaDaSemana dia : voo.getDiasDaSemana()){
-			if(DiaDaSemana.getDiasDaSemana(dia.getCodigo()) == null){
-				return "Dias da semana nao informados";
-			}else{
-				for (int i = 0; i < diasrepetidos.length; i++) {
-					if (diasrepetidos[i] == dia.getCodigo()) {
-						return "Dia da semana repetido";
-					}
-				}
-				diasrepetidos[k] = dia.getCodigo();
-			}
-		}
-		if (voo.getHora() == null){
-			return "Hora nao informada";
-		}
-		if(voo.getHora().getNano() != 0){
-			return "Hora invalida";
-		}
-		return validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
-	}
-	public String incluir(Voo voo) {
-		String msg = validar(voo);
-		if (msg == null) {
-			if (!vooDao.incluir(voo)) {
-				msg = "Voo ja existente";
-			}
-		}
-		return msg;
-	}
-	public String alterar(Voo voo) {
-		String msg = validar(voo);
-		if (msg == null) {
-			if (!vooDao.alterar(voo)) {
-				msg = VOO_INEXISTENTE;
-			}
-		}
-		return msg;
-	}
-	public String excluir(String idVoo) {
-		String msg = null;
-		if(StringUtils.isVaziaOuNula(idVoo)) {
-			msg = "Id voo errado";
-		} else if (!vooDao.excluir(idVoo)) {
-			msg = VOO_INEXISTENTE;
-		}
-		return msg;
-	}
-	public Voo buscar(String idVoo) {
-		return vooDao.buscar(idVoo);
-	}
+    private static final Set<String> AEROPORTOS_VALIDOS = Set.of(
+        "GRU", "CGH", "GIG", "SDU", "REC", "CWB", "POA", "BSB", "SSA", "FOR",
+        "MAO", "SLZ", "CNF", "BEL", "JPA", "PNZ", "CAU", "FEN", "SET", "NAT",
+        "PVH", "BVB", "FLN", "AJU", "PMW", "MCZ", "MCP", "VIX", "GYN", "CGB",
+        "CGR", "THE", "RBR", "VCP", "RAO"
+    );
+
+    private static VooMediator instancia;
+    private VooDAO vooDao = new VooDAO();
+
+    private VooMediator() {}
+
+    public static VooMediator obterInstancia() {
+        if (instancia == null) {
+            instancia = new VooMediator();
+        }
+        return instancia;
+    } 
+
+    public Voo buscar(String IdVoo) {
+        return vooDao.buscar(IdVoo);
+    }
+
+    public String validarCiaNumero(String companhiaAerea, int numeroVoo) {
+        String mensagem = null;
+
+        if(StringUtils.isVaziaOuNula(companhiaAerea) || companhiaAerea.length() !=2) {
+            mensagem = "CIA aerea errada";
+            return mensagem;
+        }
+
+        if(numeroVoo <= 0 || (numeroVoo < 1000 || numeroVoo > 9999)) {
+            mensagem = "Numero voo errado";
+            return mensagem;
+        }
+
+        return mensagem;
+    }
+
+    public String validar(Voo voo) {
+        String mensagem = null;
+
+        if(StringUtils.isVaziaOuNula(voo.getAeroportoOrigem()) || 
+        !AEROPORTOS_VALIDOS.contains(voo.getAeroportoOrigem())) {
+            mensagem = "Aeroporto origem errado";
+            return mensagem;
+        }
+
+        if(StringUtils.isVaziaOuNula(voo.getAeroportoDestino()) || 
+        !AEROPORTOS_VALIDOS.contains(voo.getAeroportoDestino())) {
+            mensagem = "Aeroporto destino errado";
+            return mensagem;
+        }
+        
+	    if (voo.getAeroportoOrigem().equals(voo.getAeroportoDestino())) {
+	        mensagem = "Aeroporto origem igual a aeroporto destino";
+	        return mensagem;
+	    }
+
+        if(voo.getDiasDaSemana() == null || voo.getDiasDaSemana().length == 0) {
+            mensagem = "Dias da semana nao informados";
+            return mensagem;
+        }
+
+        for(int i = 0; i < voo.getDiasDaSemana().length; i++) {
+            for(int j = i + 1; j < voo.getDiasDaSemana().length; j++) {
+                if(voo.getDiasDaSemana()[i] == voo.getDiasDaSemana()[j]) {
+                    mensagem = "Dia da semana repetido";
+                    return mensagem;
+                }
+            }
+        }
+
+        if(voo.getHora() == null) {
+            mensagem = "Hora nao informada";
+            return mensagem;
+        }
+
+        if(voo.getHora().getSecond() != 0 || voo.getHora().getNano() != 0) {
+            mensagem = "Hora invalida";
+            return mensagem;
+        }
+        
+        mensagem = validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
+
+        if(mensagem == null) {
+            return null;
+        }
+        else {
+            return mensagem;
+        }
+    }
+
+    public String incluir(Voo voo) {
+        String erroValidacao = validar(voo);
+        if(erroValidacao != null) {
+            return erroValidacao;
+        }
+
+        else {
+            if(!vooDao.incluir(voo)) {
+                return "Voo ja existente";
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
+    public String alterar(Voo voo) {
+        String erroValidacao = validar(voo);
+        if(erroValidacao != null) {
+            return erroValidacao;
+        }
+
+        else {
+            if(!vooDao.alterar(voo)) {
+                return "Voo inexistente";
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
+    public String excluir(String idVoo) {
+        if(StringUtils.isVaziaOuNula(idVoo)) {
+            return "Id voo errado";
+        }
+        else {
+            if(!vooDao.excluir(idVoo)) {
+                return "Voo inexistente";
+            }
+            else { 
+                return null;
+            }
+        }
+    }
+
+    public Voo[] buscarTodos() {
+        return vooDao.buscarTodos();
+    }
+
 }

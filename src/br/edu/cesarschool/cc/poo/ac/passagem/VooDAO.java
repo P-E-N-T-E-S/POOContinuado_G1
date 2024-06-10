@@ -1,48 +1,47 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
-import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
+import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 
-public class VooDAO extends SuperDAO {
+public class VooDAO extends SuperDAO{
 
-	@Override
-	public Class<Voo> obterTipo() {
-		return Voo.class;
-	}
+    public VooDAO() {
+        super();
+    }
 
-	public Voo buscar(String idVoo) {
-		return (Voo) daoGenerico.buscar(idVoo);
-	}
+    @Override
+    public Class<?> obterTipo() {
+        return Voo.class;
+    }
 
-	public boolean incluir(Voo voo) {
-		String idunico = voo.getIdUnico();
-		Voo busca = buscar(voo.getIdUnico());
-		if (buscar(voo.getIdUnico()) == null) {
-			return daoGenerico.incluir(voo);
-		}
-		return false;
-	}
+    public Voo buscar(String idVoo) {
+        return (Voo) daoGenerico.buscar(idVoo);
+    }
 
-	public boolean alterar(Voo voo) {
-		if (buscar(voo.getIdUnico()) != null) {
-			return daoGenerico.alterar(voo);
-		}
-		return false;
-	}
+    public boolean incluir(Voo voo) {
+        return daoGenerico.incluir(voo);
+    }
 
-	public boolean excluir(String idVoo) {
-		if (buscar(idVoo) != null) {
-			return daoGenerico.excluir(idVoo);
-		}
-		return false;
-	}
+    public boolean alterar(Voo voo) {
+        return daoGenerico.alterar(voo);
+    }
 
-	public Voo[] buscarTodos() {
-		Registro[] registros = daoGenerico.buscarTodos();
-		Voo[] voos = new Voo[registros.length];
-		for (int i = 0; i < registros.length; i++) {
-			voos[i] = (Voo) registros[i];
-		}
-		return voos;
-	}
+    public boolean excluir(String idVoo) {
+        return daoGenerico.excluir(idVoo);
+    }
+
+    public Voo[] buscarTodos() {
+       Registro[] regs = daoGenerico.buscarTodos();
+
+       if(regs == null) {
+        return null;
+       } else {
+            Voo[] voos = new Voo[regs.length];
+
+            for(int i = 0; i < regs.length; i++) {
+                voos[i] = (Voo) regs[i];
+            }
+            return voos;
+       }
+    }     
 }
