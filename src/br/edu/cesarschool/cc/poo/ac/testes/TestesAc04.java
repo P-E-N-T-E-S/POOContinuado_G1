@@ -27,12 +27,11 @@ public class TestesAc04 extends TesteGeral {
 	private static final String CPF_ERRADO = "CPF errado";
 	private static final Cliente CLI1 = new Cliente(OUTRO_CPF_VALIDO, "MARIO", 100);
 	private static final Voo VOO1 = new Voo("REC", "GRU", "JJ", 1231);
-	private BilheteMediator biMed = BilheteMediator.obterInstancia();
+
 	private CadastroObjetos cadastroBi = new CadastroObjetos(Bilhete.class);
 	private CadastroObjetos cadastroBiVip = new CadastroObjetos(BilheteVip.class);
 	private CadastroObjetos cadastroVoo = new CadastroObjetos(Voo.class);
-	private CadastroObjetos cadastroCli = new CadastroObjetos(Cliente.class);
-	
+
 	@Test
 	public void testBilhete1() {
 		excluirCadastros();
@@ -67,7 +66,7 @@ public class TestesAc04 extends TesteGeral {
 		cadastroBiVip.incluir(bi, bi.gerarNumero());
 		BilheteVip biOri = biMed.buscarVip("69025183514123123331111");
 		Assertions.assertNotNull(biOri);
-		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(bi, biOri));		
+		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(bi, biOri));
 	}
 	private void assertCpfErrado(ResultadoGeracaoBilhete res) {
 		assertResErro(res, CPF_ERRADO);
@@ -82,54 +81,48 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 400.0;
 		double bonus = 10;
 		LocalDateTime dataHora = LocalDateTime.parse("2201-12-13T15:11:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
-				preco, pagamentoEmPontos, dataHora, bonus);		
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
+				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCpfErrado(res);
 		assertCpfErrado(res1);
 		cpf = "";
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCpfErrado(res);
-		assertCpfErrado(res1);		
+		assertCpfErrado(res1);
 		cpf = "12345678901";
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCpfErrado(res);
-		assertCpfErrado(res1);		
+		assertCpfErrado(res1);
 		cpf = "123456789";
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCpfErrado(res);
-		assertCpfErrado(res1);		
+		assertCpfErrado(res1);
 		cpf = "1A34B6789C";
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCpfErrado(res);
-		assertCpfErrado(res1);		
+		assertCpfErrado(res1);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
-		
+
 	}
 	private void assertCiaAereaErrada(ResultadoGeracaoBilhete res) {
 		assertResErro(res, CIA_AEREA_ERRADA);
 	}
-	private void assertResErro(ResultadoGeracaoBilhete res, String msg) {
-		Assertions.assertNotNull(res);		
-		Assertions.assertNull(res.getBilhete());
-		Assertions.assertNull(res.getBilheteVip());
-		Assertions.assertNotNull(res.getMensagemErro());
-		Assertions.assertEquals(msg, res.getMensagemErro());
-	}
+
 	@Test
 	public void testBilhete6() {
 		excluirCadastros();
@@ -140,36 +133,36 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 600.0;
 		double bonus = 12;
 		LocalDateTime dataHora = LocalDateTime.parse("2202-12-27T15:11:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCiaAereaErrada(res);
 		assertCiaAereaErrada(res1);
 		ciaAerea = null;
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCiaAereaErrada(res);
 		assertCiaAereaErrada(res1);
 		ciaAerea = "JJK";
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertCiaAereaErrada(res);
 		assertCiaAereaErrada(res1);
 		ciaAerea = "YW";
 		numeroVoo = 11;
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, NUMERO_VOO_ERRADO);
 		assertResErro(res1, NUMERO_VOO_ERRADO);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
-		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));		
+		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
 	@Test
 	public void testBilhete7() {
@@ -181,21 +174,21 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 600.0;
 		double bonus = 14;
 		LocalDateTime dataHora = LocalDateTime.parse("2280-02-28T15:11:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, PRECO_ERRADO);
 		assertResErro(res1, PRECO_ERRADO);
 		preco = 0.0;
-		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, PRECO_ERRADO);
-		assertResErro(res1, PRECO_ERRADO);		
+		assertResErro(res1, PRECO_ERRADO);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
-		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));		
+		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
 	@Test
 	public void testBilhete8() {
@@ -207,14 +200,14 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = -101.0;
 		double bonus = 22;
 		LocalDateTime dataHora = LocalDateTime.parse("2222-09-30T15:11:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, PAGAMENTO_PONTOS_ERRADO);
 		assertResErro(res1, PAGAMENTO_PONTOS_ERRADO);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
-		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));		
+		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
 	@Test
 	public void testBilhete9() {
@@ -226,14 +219,14 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 101;
 		double bonus = 5;
 		LocalDateTime dataHora = LocalDateTime.parse("2240-11-29T15:22:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, PRECO_MENOR_QUE_PAGAMENTO_EM_PONTOS);
 		assertResErro(res1, PRECO_MENOR_QUE_PAGAMENTO_EM_PONTOS);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
-		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));		
+		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
 	@Test
 	public void testBilhete10() {
@@ -245,14 +238,14 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 34;
 		double bonus = 7;
 		LocalDateTime dataHora = LocalDateTime.parse("2001-01-01T23:22:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, DATA_HORA_INVALIDA);
 		assertResErro(res1, DATA_HORA_INVALIDA);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
-		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));		
+		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
 	@Test
 	public void testBilhete11() {
@@ -264,14 +257,14 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 34;
 		double bonus = 7;
 		LocalDateTime dataHora = LocalDateTime.parse("2221-12-12T23:22:00");
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, VOO_INEXISTENTE);
 		assertResErro(res1, VOO_INEXISTENTE);
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE));
-		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));		
+		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
 	@Test
 	public void testBilhete12() {
@@ -285,9 +278,9 @@ public class TestesAc04 extends TesteGeral {
 		LocalDateTime dataHora = LocalDateTime.parse("2229-12-12T23:22:00");
 		Voo voo = new Voo("GIG", "CGH", ciaAerea, numeroVoo);
 		cadastroVoo.incluir(voo, voo.obterIdVoo());
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, CLIENTE_NAO_ENCONTRADO);
 		assertResErro(res1, CLIENTE_NAO_ENCONTRADO);
@@ -308,9 +301,9 @@ public class TestesAc04 extends TesteGeral {
 		Cliente cli = new Cliente(cpf, "CLAUDIO", 67000);
 		cadastroVoo.incluir(voo, voo.obterIdVoo());
 		cadastroCli.incluir(cli, cli.getCpf());
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora, bonus);
 		assertResErro(res, PONTOS_INSUFICIENTES);
 		assertResErro(res1, PONTOS_INSUFICIENTES);
@@ -327,7 +320,7 @@ public class TestesAc04 extends TesteGeral {
 		double pagamentoEmPontos = 250;
 		double valorPago = 5000;
 		double valorPontuacao1 = 250;
-		double valorPontuacao2 = 275; 
+		double valorPontuacao2 = 275;
 		double saldoCliente1 = 10250.0;
 		double saldoCliente2 = 5525.0;
 		double bonus = 10;
@@ -341,15 +334,15 @@ public class TestesAc04 extends TesteGeral {
 		Cliente cli = new Cliente(cpf, nome, saldo);
 		cadastroVoo.incluir(voo, voo.obterIdVoo());
 		cadastroCli.incluir(cli, cli.getCpf());
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora1, bonus);
 		assertSucesso(res);
 		assertSucessoVip(res1);
-		assertDadosBilhete(res.getBilhete(), preco, pagamentoEmPontos, valorPago, valorPontuacao1, dataHora, voo, 
+		assertDadosBilhete(res.getBilhete(), preco, pagamentoEmPontos, valorPago, valorPontuacao1, dataHora, voo,
 				cli,"9177539583990092231811", saldoCliente1);
-		assertDadosBilheteVip(res1.getBilheteVip(), preco, pagamentoEmPontos, valorPago, valorPontuacao2, dataHora1, voo, 
+		assertDadosBilheteVip(res1.getBilheteVip(), preco, pagamentoEmPontos, valorPago, valorPontuacao2, dataHora1, voo,
 				cli,"9177539583990092232811", saldoCliente2);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cli.getCpf());
 		Assertions.assertEquals(saldoCliente2, cliOri.getSaldoPontos());
@@ -361,20 +354,20 @@ public class TestesAc04 extends TesteGeral {
 	}
 	private void assertSucesso(ResultadoGeracaoBilhete res) {
 		Assertions.assertNull(res.getMensagemErro());
-		Assertions.assertNotNull(res);		
+		Assertions.assertNotNull(res);
 		Assertions.assertNotNull(res.getBilhete());
 		Assertions.assertNull(res.getBilheteVip());
-		
+
 	}
 	private void assertSucessoVip(ResultadoGeracaoBilhete res) {
 		Assertions.assertNull(res.getMensagemErro());
-		Assertions.assertNotNull(res);		
+		Assertions.assertNotNull(res);
 		Assertions.assertNull(res.getBilhete());
-		Assertions.assertNotNull(res.getBilheteVip());		
+		Assertions.assertNotNull(res.getBilheteVip());
 	}
 	private void assertDadosBilhete(Bilhete bilhete, double preco, double pagamentoEmPontos,
-			double valorPago, double valorPontuacao, LocalDateTime dataHora, Voo voo, Cliente cli,
-			String numeroBilhete, double saldoCliente) {
+									double valorPago, double valorPontuacao, LocalDateTime dataHora, Voo voo, Cliente cli,
+									String numeroBilhete, double saldoCliente) {
 		Assertions.assertNotNull(bilhete.getVoo());
 		Assertions.assertNotNull(bilhete.getCliente());
 		Assertions.assertEquals(preco, bilhete.getPreco());
@@ -390,11 +383,11 @@ public class TestesAc04 extends TesteGeral {
 		Assertions.assertEquals(cli.getCpf(), bilhete.getCliente().getCpf());
 		Assertions.assertEquals(cli.getNome(), bilhete.getCliente().getNome());
 		Assertions.assertEquals(numeroBilhete, bilhete.gerarNumero());
-		Assertions.assertNotNull(bilhete.getDhInclusao());		
+		Assertions.assertNotNull(bilhete.getDhInclusao());
 	}
 	private void assertDadosBilheteVip(BilheteVip bilhete, double preco, double pagamentoEmPontos,
-			double valorPago, double valorPontuacao, LocalDateTime dataHora, Voo voo, Cliente cli,
-			String numeroBilhete, double saldoCliente) {
+									   double valorPago, double valorPontuacao, LocalDateTime dataHora, Voo voo, Cliente cli,
+									   String numeroBilhete, double saldoCliente) {
 		Assertions.assertNotNull(bilhete.getVoo());
 		Assertions.assertNotNull(bilhete.getCliente());
 		Assertions.assertEquals(preco, bilhete.getPreco());
@@ -410,7 +403,7 @@ public class TestesAc04 extends TesteGeral {
 		Assertions.assertEquals(cli.getCpf(), bilhete.getCliente().getCpf());
 		Assertions.assertEquals(cli.getNome(), bilhete.getCliente().getNome());
 		Assertions.assertEquals(numeroBilhete, bilhete.gerarNumero());
-		Assertions.assertNotNull(bilhete.getDhInclusao());		
+		Assertions.assertNotNull(bilhete.getDhInclusao());
 	}
 	@Test
 	public void testBilhete15() {
@@ -435,16 +428,15 @@ public class TestesAc04 extends TesteGeral {
 		Bilhete vip = new BilheteVip(cli, voo, preco, pagamentoEmPontos, dataHora1, bonus);
 		cadastroBi.incluir(bi, bi.gerarNumero());
 		cadastroBiVip.incluir(vip, vip.gerarNumero());
-		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res = biMed.gerarBilhete(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora);
-		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo, 
+		ResultadoGeracaoBilhete res1 = biMed.gerarBilheteVip(cpf, ciaAerea, numeroVoo,
 				preco, pagamentoEmPontos, dataHora1, bonus);
 		assertResErro(res, BILHETE_JA_EXISTENTE);
-		assertResErro(res1, BILHETE_JA_EXISTENTE);		
+		assertResErro(res1, BILHETE_JA_EXISTENTE);
 		Assertions.assertEquals(1, obterQtdArquivosDir(DIR_CLIENTE));
 		Assertions.assertEquals(1, obterQtdArquivosDir(DIR_VOO));
 		Assertions.assertEquals(1, obterQtdArquivosDir(DIR_BILHETE));
 		Assertions.assertEquals(1, obterQtdArquivosDir(DIR_BILHETE_VIP));
 	}
-	
 }

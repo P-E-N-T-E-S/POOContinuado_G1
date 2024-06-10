@@ -1,6 +1,6 @@
 package br.edu.cesarschool.cc.poo.ac.utils;
 
-public enum DiasDaSemana {
+public enum DiaDaSemana {
     SEGUNDA_FEIRA(1, "segunda_feira"),
     TERCA_FEIRA(2, "terca_feira"),
     QUARTA_FEIRA(3, "quarta_feira"),
@@ -12,7 +12,7 @@ public enum DiasDaSemana {
     private final int codigo;
     private final String nome;
 
-    private DiasDaSemana(int codigo, String nome) {
+    private DiaDaSemana(int codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;
     }
@@ -25,8 +25,8 @@ public enum DiasDaSemana {
         return codigo;
     }
 
-    public static DiasDaSemana getDiasDaSemana(int codigo) {
-        for (DiasDaSemana dia : DiasDaSemana.values()) {
+    public static DiaDaSemana getDiasDaSemana(int codigo) {
+        for (DiaDaSemana dia : DiaDaSemana.values()) {
             if (dia.getCodigo() == codigo) {
                 return dia;
             }

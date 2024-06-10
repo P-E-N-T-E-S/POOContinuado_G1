@@ -3,7 +3,7 @@ package br.edu.cesarschool.cc.poo.ac.passagem;
 import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
-public class VooDAO extends SuperDAO<Voo> {
+public class VooDAO extends SuperDAO {
 
 	@Override
 	public Class<Voo> obterTipo() {
@@ -15,6 +15,8 @@ public class VooDAO extends SuperDAO<Voo> {
 	}
 
 	public boolean incluir(Voo voo) {
+		String idunico = voo.getIdUnico();
+		Voo busca = buscar(voo.getIdUnico());
 		if (buscar(voo.getIdUnico()) == null) {
 			return daoGenerico.incluir(voo);
 		}

@@ -1,6 +1,6 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
-import br.edu.cesarschool.cc.poo.ac.utils.DiasDaSemana;
+import br.edu.cesarschool.cc.poo.ac.utils.DiaDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
 
 public class VooMediator {
@@ -52,8 +52,8 @@ public class VooMediator {
 		}
 		int[] diasrepetidos = new int[7];
 		int k = 0;
-		for(DiasDaSemana dia : voo.getDiasDaSemana()){
-			if(DiasDaSemana.getDiasDaSemana(dia.getCodigo()) == null){
+		for(DiaDaSemana dia : voo.getDiasDaSemana()){
+			if(DiaDaSemana.getDiasDaSemana(dia.getCodigo()) == null){
 				return "Dias da semana nao informados";
 			}else{
 				for (int i = 0; i < diasrepetidos.length; i++) {

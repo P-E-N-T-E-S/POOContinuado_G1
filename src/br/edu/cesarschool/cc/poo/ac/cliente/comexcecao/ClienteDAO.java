@@ -4,7 +4,7 @@ import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
-public class ClienteDAO extends SuperDAO<Cliente> {
+public class ClienteDAO extends SuperDAO {
 
     @Override
     public Class<Cliente> obterTipo() {

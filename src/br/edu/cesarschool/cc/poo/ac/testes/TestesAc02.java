@@ -15,9 +15,9 @@ public class TestesAc02 extends TesteGeral {
 	private static final String CPF_DV_INVALIDO = "91775395811";
 	private ClienteMediator cliMed = ClienteMediator.obterInstancia();
 	private CadastroObjetos cadastroCli = new CadastroObjetos(Cliente.class);
-		
+
 	@Test
-	public void testCadCliente1() {		
+	public void testCadCliente1() {
 		excluirCadastros();
 		Cliente cli = new Cliente("","MAX", 0.0);
 		Assertions.assertEquals(CPF_ERRADO, cliMed.incluir(cli));
@@ -34,7 +34,7 @@ public class TestesAc02 extends TesteGeral {
 	@Test
 	public void testCadCliente2() {
 		excluirCadastros();
-		Cliente cli = new Cliente(CPF_VALIDO, "", 0.0); 
+		Cliente cli = new Cliente(CPF_VALIDO, "", 0.0);
 		Assertions.assertEquals(NOME_ERRADO, cliMed.validar(cli));
 		cli = new Cliente(CPF_VALIDO, null, 0.0);
 		Assertions.assertEquals(NOME_ERRADO, cliMed.alterar(cli));
@@ -46,7 +46,7 @@ public class TestesAc02 extends TesteGeral {
 	public void testCadCliente3() {
 		excluirCadastros();
 		Cliente cli = new Cliente(CPF_VALIDO, "DA", -1.0);
-		Assertions.assertEquals("saldo errado", cliMed.validar(cli));		
+		Assertions.assertEquals("saldo errado", cliMed.validar(cli));
 		Assertions.assertEquals(0, obterQtdArquivosDir(DIR_CLIENTE));
 	}
 	@Test
@@ -56,11 +56,11 @@ public class TestesAc02 extends TesteGeral {
 		cadastroCli.incluir(cli, cli.getCpf());
 		Cliente cliDup = new Cliente(CPF_VALIDO, "MARIA", 300);
 		Assertions.assertEquals("Cliente ja existente", cliMed.incluir(cliDup));
-		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);		
+		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);
 		Assertions.assertEquals(1, qtdArqs);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cli.getCpf());
 		Assertions.assertNotNull(cliOri);
-		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cli, cliOri));	
+		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cli, cliOri));
 	}
 	@Test
 	public void testCadCliente5() {
@@ -69,12 +69,12 @@ public class TestesAc02 extends TesteGeral {
 		cadastroCli.incluir(cli, cli.getCpf());
 		Cliente cliOutro = new Cliente(OUTRO_CPF_VALIDO, "JOSIAS", 212);
 		Assertions.assertEquals(null, cliMed.incluir(cliOutro));
-		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);		
+		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);
 		Assertions.assertEquals(2, qtdArqs);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cliOutro.getCpf());
 		Assertions.assertNotNull(cliOri);
-		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cliOutro, cliOri));		
-	}		
+		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cliOutro, cliOri));
+	}
 	@Test
 	public void testCadCliente6() {
 		excluirCadastros();
@@ -82,11 +82,11 @@ public class TestesAc02 extends TesteGeral {
 		cadastroCli.incluir(cli, cli.getCpf());
 		Cliente cliOutro = new Cliente(OUTRO_CPF_VALIDO, "BELINDA", 12);
 		Assertions.assertEquals(CLIENTE_INEXISTENTE, cliMed.alterar(cliOutro));
-		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);		
+		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);
 		Assertions.assertEquals(1, qtdArqs);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cli.getCpf());
 		Assertions.assertNotNull(cliOri);
-		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cli, cliOri));		
+		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cli, cliOri));
 	}
 	@Test
 	public void testCadCliente7() {
@@ -95,41 +95,41 @@ public class TestesAc02 extends TesteGeral {
 		cadastroCli.incluir(cli, cli.getCpf());
 		Cliente cliOutro = new Cliente(CPF_VALIDO, "SERGE", 24);
 		Assertions.assertEquals(null, cliMed.alterar(cliOutro));
-		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);		
+		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);
 		Assertions.assertEquals(1, qtdArqs);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cli.getCpf());
 		Assertions.assertNotNull(cliOri);
-		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cliOutro, cliOri));		
+		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cliOutro, cliOri));
 	}
 	@Test
 	public void testCadCliente8() {
 		excluirCadastros();
 		Cliente cli = new Cliente(CPF_VALIDO, "KLEBER", 90);
-		cadastroCli.incluir(cli, cli.getCpf());		
+		cadastroCli.incluir(cli, cli.getCpf());
 		Assertions.assertEquals(CLIENTE_INEXISTENTE, cliMed.excluir(OUTRO_CPF_VALIDO));
-		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);		
+		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);
 		Assertions.assertEquals(1, qtdArqs);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cli.getCpf());
 		Assertions.assertNotNull(cliOri);
-		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cli, cliOri));		
+		Assertions.assertTrue(ComparadoraObjetosSerial.compareObjectsSerial(cli, cliOri));
 	}
 	@Test
 	public void testCadCliente9() {
 		excluirCadastros();
 		Cliente cli = new Cliente(CPF_VALIDO, "FABIANO", 66);
-		cadastroCli.incluir(cli, cli.getCpf());		
+		cadastroCli.incluir(cli, cli.getCpf());
 		Assertions.assertEquals(null, cliMed.excluir(CPF_VALIDO));
-		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);		
+		int qtdArqs = obterQtdArquivosDir(DIR_CLIENTE);
 		Assertions.assertEquals(0, qtdArqs);
 		Cliente cliOri = (Cliente)cadastroCli.buscar(cli.getCpf());
-		Assertions.assertNull(cliOri);				
+		Assertions.assertNull(cliOri);
 	}
 	@Test
 	public void testCadCliente10() {
 		excluirCadastros();
 		Cliente cli = new Cliente(CPF_VALIDO, "KLAUS", 5);
-		cadastroCli.incluir(cli, cli.getCpf());		
-		Assertions.assertNull(cliMed.buscar(OUTRO_CPF_VALIDO));		
+		cadastroCli.incluir(cli, cli.getCpf());
+		Assertions.assertNull(cliMed.buscar(OUTRO_CPF_VALIDO));
 	}
 	@Test
 	public void testCadCliente11() {

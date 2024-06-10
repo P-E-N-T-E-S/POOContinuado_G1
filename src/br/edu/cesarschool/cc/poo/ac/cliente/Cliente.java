@@ -38,6 +38,10 @@ public class Cliente extends Registro implements Comparavel {
 		saldoPontos -= valor;
 	}
 
+	public void setSaldoPontos(double saldoPontos) {
+		this.saldoPontos = saldoPontos;
+	}
+
 	@Override
 	public String getIdUnico() {
 		return getCpf();

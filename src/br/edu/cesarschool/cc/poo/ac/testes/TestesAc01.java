@@ -30,8 +30,8 @@ public class TestesAc01 {
 		Bilhete bil = new Bilhete(null, null, 1200, 300, null);
 		Assertions.assertEquals(900, bil.obterValorPago());
 		Assertions.assertEquals(45, bil.obterValorPontuacao());
-		BilheteVip bilVip = new BilheteVip(null, null, 1000, 200, null, 20);		
-		Assertions.assertEquals(48, bilVip.obterValorPontuacaoVip());			
+		BilheteVip bilVip = new BilheteVip(null, null, 1000, 200, null, 20);
+		Assertions.assertEquals(48, bilVip.obterValorPontuacaoVip());
 	}
 	@Test
 	public void testBilhete2() {
@@ -67,7 +67,7 @@ public class TestesAc01 {
 		Assertions.assertTrue(med1 == med2);
 		Constructor<?>[] consts = clazz.getDeclaredConstructors();
 		Assertions.assertEquals(1, consts.length);
-		Assertions.assertEquals(2, consts[0].getModifiers());		
+		Assertions.assertEquals(2, consts[0].getModifiers());
 	}
-	
+
 }

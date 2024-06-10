@@ -68,16 +68,19 @@ public class ClienteMediator {
 	}
 
 	public Cliente[] obterClientesPorNome() {
-		Cliente[] todosClientes = clienteDao.buscarTodos();
-		Comparador comparadorNome = new Comparador() {
+		Cliente[] clientes = clienteDao.buscarTodos();
+
+		Ordenadora.ordenar(clientes, new Comparador() {
 			@Override
 			public int comparar(Object o1, Object o2) {
-				Cliente cliente1 = (Cliente) o1;
-				Cliente cliente2 = (Cliente) o2;
-				return cliente1.getNome().compareToIgnoreCase(cliente2.getNome());
+				Cliente cliente = (Cliente) o1;
+				Cliente cliente_aux = (Cliente) o2;
+
+				int result = cliente.getNome().compareTo(cliente_aux.getNome());
+				return result;
 			}
-		};
-		Ordenadora.ordenar(todosClientes, comparadorNome);
-		return todosClientes;
+		});
+
+		return clientes;
 	}
 }

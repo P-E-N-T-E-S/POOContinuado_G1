@@ -1,6 +1,6 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
-import br.edu.cesarschool.cc.poo.ac.utils.DiasDaSemana;
+import br.edu.cesarschool.cc.poo.ac.utils.DiaDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
 import java.time.LocalTime;
@@ -10,7 +10,7 @@ public class Voo extends Registro {
 	private String aeroportoDestino;
 	private String companhiaAerea;
 	private int numeroVoo;
-	private DiasDaSemana[] diasDaSemana;
+	private DiaDaSemana[] diaDaSemana;
 	private LocalTime hora;
 
 	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo) {
@@ -19,9 +19,9 @@ public class Voo extends Registro {
 		this.companhiaAerea = companhiaAerea;
 		this.numeroVoo = numeroVoo;
 	}
-	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo, DiasDaSemana[] diasDaSemana, LocalTime horas) {
+	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo, DiaDaSemana[] diaDaSemana, LocalTime horas) {
 		this(aeroportoOrigem, aeroportoDestino, companhiaAerea, numeroVoo);
-		this.diasDaSemana = diasDaSemana;
+		this.diaDaSemana = diaDaSemana;
 		this.hora = horas;
 	}
 	public String getAeroportoOrigem() {
@@ -52,15 +52,15 @@ public class Voo extends Registro {
 		this.hora = hora;
 	}
 
-	public DiasDaSemana[] getDiasDaSemana() {
-		return diasDaSemana;
+	public DiaDaSemana[] getDiasDaSemana() {
+		return diaDaSemana;
 	}
 
-	public void setDiasDaSemana(DiasDaSemana[] diasDaSemana) {
-		this.diasDaSemana = diasDaSemana;
+	public void setDiaDaSemana(DiaDaSemana[] diaDaSemana) {
+		this.diaDaSemana = diaDaSemana;
 	}
 
 	public String getIdUnico() {
-		return String.valueOf(getNumeroVoo());
+		return obterIdVoo();
 	}
 }

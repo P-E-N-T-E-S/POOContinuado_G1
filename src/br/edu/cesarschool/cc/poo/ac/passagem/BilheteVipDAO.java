@@ -3,7 +3,7 @@ package br.edu.cesarschool.cc.poo.ac.passagem;
 import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
-public class BilheteVipDAO extends SuperDAO<BilheteVip> {
+public class BilheteVipDAO extends SuperDAO {
 
 	@Override
 	public Class<BilheteVip> obterTipo() {

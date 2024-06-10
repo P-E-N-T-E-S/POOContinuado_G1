@@ -6,9 +6,8 @@ import java.util.List;
 
 import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 import br.edu.cesarschool.cc.poo.ac.cliente.ClienteMediator;
-import br.edu.cesarschool.cc.poo.ac.utils.DiasDaSemana;
+import br.edu.cesarschool.cc.poo.ac.utils.DiaDaSemana;
 import br.edu.cesarschool.cc.poo.ac.utils.ValidadorCPF;
-import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Comparador;
 import br.edu.cesarschool.cc.poo.ac.utils.ordenacao.Ordenadora;
 import br.edu.cesarschool.cc.poo.ac.negocio.comparadores.ComparadorBilhetePreco;
 import br.edu.cesarschool.cc.poo.ac.negocio.comparadores.ComparadorBilheteDataHora;
@@ -66,18 +65,22 @@ public class BilheteMediator {
 			return "Voo nao encontrado";
 		}
 		boolean valido = false;
-		int diaAValidar = dataHora.getDayOfWeek().getValue();
-		for(DiasDaSemana dia : voo.getDiasDaSemana()){
-			if(dia.getCodigo() == diaAValidar){
-				valido = true;
-				break;
+		if(voo.getDiasDaSemana() != null && voo.getDiasDaSemana().length != 0){
+			int diaAValidar = dataHora.getDayOfWeek().getValue();
+			for(DiaDaSemana dia : voo.getDiasDaSemana()){
+				if(dia.getCodigo() == diaAValidar){
+					valido = true;
+					break;
+				}
+			}
+			if(!valido){
+				return "Voo nao disponivel";
 			}
 		}
-		if(!valido){
-			return "Voo nao disponivel";
-		}
-		if(!(dataHora.getHour() == voo.getHora().getHour() && dataHora.getMinute() == voo.getHora().getMinute())){
-			return "Hora diferente da especificada no voo";
+		if(voo.getHora() != null){
+			if(!(dataHora.getHour() == voo.getHora().getHour() && dataHora.getMinute() == voo.getHora().getMinute())){
+				return "Hora diferente da especificada no voo";
+			}
 		}
 		return null;
 	}
@@ -156,15 +159,22 @@ public class BilheteMediator {
 	}
 
 	public Bilhete[] obterBilhetesPorDataHora(double precoMin) {
-		Bilhete[] todosBilhetes = bilheteDao.buscarTodos();
-		List<Bilhete> filtrados = new ArrayList<>();
-		for (Bilhete bilhete : todosBilhetes) {
-			if (bilhete.getPreco() <= precoMin) {
-				filtrados.add(bilhete);
+		Bilhete[] bilhetes = bilheteDao.buscarTodos();
+
+		int count = 0;
+		for(int i = 0; i < bilhetes.length; i++) {
+			if(bilhetes[i].getPreco() >= precoMin) {
+				bilhetes[count] = bilhetes[i];
+				count++;
 			}
 		}
-		Bilhete[] bilhetesArray = filtrados.toArray(new Bilhete[0]);
-		Ordenadora.ordenar(bilhetesArray, new ComparadorBilheteDataHora());
-		return bilhetesArray;
+
+		Bilhete[] bilhetesAtualizados = new Bilhete[count];
+		for(int i = 0; i < count; i ++) {
+			bilhetesAtualizados[i] = bilhetes[i];
+		}
+
+		Ordenadora.ordenar(bilhetesAtualizados, new ComparadorBilheteDataHora());
+		return bilhetesAtualizados;
 	}
 }

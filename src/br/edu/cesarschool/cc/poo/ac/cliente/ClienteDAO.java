@@ -1,12 +1,16 @@
 package br.edu.cesarschool.cc.poo.ac.cliente;
 
-import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 import br.edu.cesarschool.cc.poo.ac.utils.Registro;
+import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
 
-public class ClienteDAO extends SuperDAO<Cliente> {
+public class ClienteDAO extends SuperDAO{
+
+	public ClienteDAO() {
+		super();
+	}
 
 	@Override
-	public Class<Cliente> obterTipo() {
+	public Class<?> obterTipo() {
 		return Cliente.class;
 	}
 
@@ -15,32 +19,29 @@ public class ClienteDAO extends SuperDAO<Cliente> {
 	}
 
 	public boolean incluir(Cliente cliente) {
-		if (buscar(cliente.getIdUnico()) == null) {
-			return daoGenerico.incluir(cliente);
-		}
-		return false;
+		return daoGenerico.incluir(cliente);
 	}
 
 	public boolean alterar(Cliente cliente) {
-		if (buscar(cliente.getIdUnico()) != null) {
-			return daoGenerico.alterar(cliente);
-		}
-		return false;
+		return daoGenerico.alterar(cliente);
 	}
 
 	public boolean excluir(String cpf) {
-		if (buscar(cpf) != null) {
-			return daoGenerico.excluir(cpf);
-		}
-		return false;
+		return daoGenerico.excluir(cpf);
 	}
 
 	public Cliente[] buscarTodos() {
-		Registro[] registros = daoGenerico.buscarTodos();
-		Cliente[] clientes = new Cliente[registros.length];
-		for (int i = 0; i < registros.length; i++) {
-			clientes[i] = (Cliente) registros[i];
+		Registro[] regs = daoGenerico.buscarTodos();
+
+		if(regs == null) {
+			return null;
+		} else {
+			Cliente[] clientes = new Cliente[regs.length];
+
+			for(int i = 0; i < regs.length; i++) {
+				clientes[i] = (Cliente) regs[i];
+			}
+			return clientes;
 		}
-		return clientes;
 	}
 }
